@@ -34,61 +34,80 @@ class User
             return false; // Return false if there was an error
         }
     }
-    // Function to generate a random 2FA code
-    public function generate2FACode()
-    {
-        return rand(100000, 999999); // Generate a random 6-digit code
-    }
+     // Function to generate a random 2FA code
+     public function generate2FACode()
+     {
+         return rand(100000, 999999); // Generate a random 6-digit code
+     }
+ 
+     // Function to send the 2FA code via email
+     public function send2FACode($email, $code)
+     {
+         $subject = "Your 2FA Code";
+         $message = "Your two-factor authentication code is: $code";
+         mail($email, $subject, $message);
+     }
+ 
+     // Function to start the 2FA process: Generate the code, save it, and send it to the user
+     public function start2FA($userId, $email)
+     {
+         $code = $this->generate2FACode();
+         $expiryTime = date('Y-m-d H:i:s', strtotime('+10 minutes'));
+ 
+         // Save the 2FA code and expiry time to the database
+         $stmt = $this->db->prepare("UPDATE " . $this->table . " SET two_factor_code = :code, two_factor_code_expiry = :expiry WHERE id = :userId");
+         $stmt->bindParam(':code', $code);
+         $stmt->bindParam(':expiry', $expiryTime);
+         $stmt->bindParam(':userId', $userId);
+         $stmt->execute();
+ 
+         // Send the 2FA code to the user's email
+         $this->send2FACode($email, $code);
+     }
+ 
+     // Function to verify the 2FA code entered by the user
+     public function verify2FACode($userId, $enteredCode)
+     {
+         // Get the stored 2FA code and its expiry time
+         $stmt = $this->db->prepare("SELECT two_factor_code, two_factor_code_expiry FROM " . $this->table . " WHERE id = :userId");
+         $stmt->bindParam(':userId', $userId);
+         $stmt->execute();
+         $row = $stmt->fetch(PDO::FETCH_ASSOC);
+ 
+         // Check if the entered code matches and if it has not expired
+         if ($row && $row['two_factor_code'] == $enteredCode) {
+             $expiry = new DateTime($row['two_factor_code_expiry']);
+             $currentTime = new DateTime();
+ 
+             if ($currentTime < $expiry) {
+                 // Code is correct and not expired
+                 return ['status'=> true,'message'=>'code verified successfully'];
 
-    // Function to send the 2FA code via email
-    public function send2FACode($email, $code)
-    {
-        $subject = "Your 2FA Code";
-        $message = "Your two-factor authentication code is: $code";
-        mail($email, $subject, $message);
-    }
+             } else {
+                 // Code has expired
+                 return ['status' =>false, 'message' =>'Invalid 2FA code'];
+             }
+             } else {
+                  return['status' => false, 'message' => 'User not found or 2FA data missing.'];
+             }
+         }
+    
 
-    // Function to start the 2FA process: Generate the code, save it, and send it to the user
-    public function start2FA($userId, $email)
+        public function store2FACode($email, $code)
     {
-        $code = $this->generate2FACode();
-        $expiryTime = date('Y-m-d H:i:s', strtotime('+10 minutes'));
+        // Update the 2FA code for the user with the specified email
+        $query = "UPDATE " . $this->table . " SET two_factor_code = :code WHERE email = :email";
+        $stmt = $this->db->prepare($query);
 
-        // Save the 2FA code and expiry time to the database
-        $stmt = $this->db->prepare("UPDATE " . $this->table . " SET two_factor_code = :code, two_factor_code_expiry = :expiry WHERE id = :userId");
         $stmt->bindParam(':code', $code);
-        $stmt->bindParam(':expiry', $expiryTime);
-        $stmt->bindParam(':userId', $userId);
-        $stmt->execute();
+        $stmt->bindParam(':email', $email);
 
-        // Send the 2FA code to the user's email
-        $this->send2FACode($email, $code);
-    }
-
-    // Function to verify the 2FA code entered by the user
-    public function verify2FACode($userId, $enteredCode)
-    {
-        // Get the stored 2FA code and its expiry time
-        $stmt = $this->db->prepare("SELECT two_factor_code, two_factor_code_expiry FROM " . $this->table . " WHERE id = :userId");
-        $stmt->bindParam(':userId', $userId);
-        $stmt->execute();
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        // Check if the entered code matches and if it has not expired
-        if ($row && $row['two_factor_code'] == $enteredCode) {
-            $expiry = new DateTime($row['two_factor_code_expiry']);
-            $currentTime = new DateTime();
-
-            if ($currentTime < $expiry) {
-                // Code is correct and not expired
-                return true;
-            } else {
-                // Code has expired
-                return false;
-            }
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            echo "Error storing 2FA code: " . implode(", ", $stmt->errorInfo());
+            return false;
         }
-
-        return false; // Invalid code
-    }
+    } 
     
 }

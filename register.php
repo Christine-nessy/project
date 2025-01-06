@@ -1,7 +1,47 @@
 <?php
+require_once 'PHPMailer/src/PHPMailer.php';
+require_once 'PHPMailer/src/SMTP.php';
+require_once 'PHPMailer/src/Exception.php';
+require 'C:\Apache24\htdocs\project\PHPMailer\vendor\autoload.php';
+
 require_once 'Database.php';
 require_once 'User.php';
 session_start();
+
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+// Function to send the 2FA code via email
+function send2FACode($email, $code) {
+    $mail = new PHPMailer(true);
+
+    try {
+        // Server settings
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com'; // Replace with your SMTP server
+        $mail->SMTPAuth = true;
+        $mail->Username = 'christinemungla16@gmail.com'; // Replace with your SMTP username
+        $mail->Password = 'bksagxgtoopsyzzl'; // Replace with your SMTP password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+        $mail->Port = 465;
+
+        // Recipients
+        $mail->setFrom('christinemungla16@gmail.com', 'BBIT EXEMPT');
+        $mail->addAddress($email);
+
+        // Content
+        $mail->isHTML(true);
+        $mail->Subject = 'Your 2FA Verification Code';
+        $mail->Body = "Your 2FA verification code is: <b>$code</b>";
+        $mail->AltBody = "Your 2FA verification code is: $code";
+
+        $mail->send();
+        echo '2FA code has been sent to your email.';
+    } catch (Exception $e) {
+        echo "Error sending 2FA code: {$mail->ErrorInfo}";
+    }
+}
 
 
 
@@ -31,24 +71,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user = new User($db);
 
     // Store to database
+    // if ($user->createUser($username, $email, $hashedPassword)) {
+    //     echo "User registered successfully!";
+    //      // Get the user's ID from the database (for 2FA)
+    //      $stmt = $db->getConnection()->prepare("SELECT id FROM users WHERE email = :email");
+    //      $stmt->bindParam(':email', $email);
+    //      $stmt->execute();
+    //      $userId = $stmt->fetch(PDO::FETCH_ASSOC)['id'];
+ 
+    //      // Start 2FA process
+    //      $user->start2FA($userId, $email);
+ 
+    //      // Redirect to the 2FA verification page
+    //      header("Location: verify_2fa.php");
+    //      exit;
+    // } else {
+    //     echo "Error registering user.";
+    // }
+    // Store to database
     if ($user->createUser($username, $email, $hashedPassword)) {
-        echo "User registered successfully!";
-        // Get the user's ID from the database (for 2FA)
-        $stmt = $db->getConnection()->prepare("SELECT id FROM users WHERE email = :email");
-        $stmt->bindParam(':email', $email);
-        $stmt->execute();
-        $userId = $stmt->fetch(PDO::FETCH_ASSOC)['id'];
+        // Generate 2FA code and send email
+        $twoFACode = rand(100000, 999999); // Generate a 6-digit random code
+        $user->store2FACode($email, $twoFACode); // Assuming this method stores the code in the DB
+        
+        // Send the code via email
+        send2FACode($email, $twoFACode);
 
-        // Start 2FA process
-        $user->start2FA($userId, $email);
-
-        // Redirect to the 2FA verification page
+        echo "User registered successfully! A 2FA code has been sent to your email.";
         header("Location: verify_2fa.php");
         exit;
     } else {
         echo "Error registering user.";
     }
-
+ 
 }
 ?>
 <!DOCTYPE html>
