@@ -77,11 +77,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //     $twoFACode = rand(100000, 999999); // Generate a 6-digit random code
     //     $user->store2FACode($email, $twoFACode); // Assuming this method stores the code in the DB
         
-    //     // Send the code via email
-    //     send2FACode($email, $twoFACode);
+        // Send the code via email
+         send2FACode($email, $twoFACode);
 
-    //     echo "User registered successfully! A 2FA code has been sent to your email.";
-    //     header("Location: verify_2fa.php");
+         echo "User registered successfully! A 2FA code has been sent to your email.";
+         header("Location: verify_2fa.php");
          exit;
      } else {
     //     echo "Error registering user.";
