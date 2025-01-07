@@ -82,8 +82,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     //     echo "User registered successfully! A 2FA code has been sent to your email.";
     //     header("Location: verify_2fa.php");
-    //     exit;
-    // } else {
+         exit;
+     } else {
     //     echo "Error registering user.";
     // }
  
