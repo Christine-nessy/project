@@ -109,5 +109,24 @@ class User
             return false;
         }
     } 
+    public function authenticateUser($email, $password) {
+        $query = "SELECT * FROM " . $this->table . " WHERE email = :email";
+        $stmt = $this->db->getConnection()->prepare($query);
+    
+        // Bind parameters
+        $stmt->bindParam(':email', $email);
+    
+        // Execute the query
+        $stmt->execute();
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+        // Check if user exists and verify the password
+        if ($user && password_verify($password, $user['password'])) {
+            return $user; // Return user data if authenticated
+        }
+    
+        return false; // Return false if authentication fails
+    }
+    
     
 }

@@ -27,7 +27,7 @@ function send2FACode($email, $code) {
         $mail->Port = 465;
 
         // Recipients
-        $mail->setFrom('christinemungla16@gmail.com', 'BBIT EXEMPT');
+        $mail->setFrom('christinemungla16@gmail.com', 'HookedByNessy');
         $mail->addAddress($email);
 
         // Content
@@ -70,39 +70,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Instantiate Database and User class
     $user = new User($db);
 
-    // Store to database
+   
+    // // Store to database
     // if ($user->createUser($username, $email, $hashedPassword)) {
-    //     echo "User registered successfully!";
-    //      // Get the user's ID from the database (for 2FA)
-    //      $stmt = $db->getConnection()->prepare("SELECT id FROM users WHERE email = :email");
-    //      $stmt->bindParam(':email', $email);
-    //      $stmt->execute();
-    //      $userId = $stmt->fetch(PDO::FETCH_ASSOC)['id'];
- 
-    //      // Start 2FA process
-    //      $user->start2FA($userId, $email);
- 
-    //      // Redirect to the 2FA verification page
-    //      header("Location: verify_2fa.php");
-    //      exit;
+    //     // Generate 2FA code and send email
+    //     $twoFACode = rand(100000, 999999); // Generate a 6-digit random code
+    //     $user->store2FACode($email, $twoFACode); // Assuming this method stores the code in the DB
+        
+    //     // Send the code via email
+    //     send2FACode($email, $twoFACode);
+
+    //     echo "User registered successfully! A 2FA code has been sent to your email.";
+    //     header("Location: verify_2fa.php");
+    //     exit;
     // } else {
     //     echo "Error registering user.";
     // }
-    // Store to database
-    if ($user->createUser($username, $email, $hashedPassword)) {
-        // Generate 2FA code and send email
-        $twoFACode = rand(100000, 999999); // Generate a 6-digit random code
-        $user->store2FACode($email, $twoFACode); // Assuming this method stores the code in the DB
-        
-        // Send the code via email
-        send2FACode($email, $twoFACode);
-
-        echo "User registered successfully! A 2FA code has been sent to your email.";
-        header("Location: verify_2fa.php");
-        exit;
-    } else {
-        echo "Error registering user.";
-    }
  
 }
 ?>
@@ -113,35 +96,97 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration Form</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body{
+    background: url('./images/Nessy.png') no-repeat center center/cover;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, sans-serif;
+}
+
+        .form-container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            max-width: 420px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(90deg, #ff6f91, #ff9671, #ffc75f, #f9f871);
+        }
+        .form-container h2 {
+            text-align: center;
+            color: #555;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        .form-container label {
+            font-weight: bold;
+            color: #333;
+        }
+        .form-container input {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+        }
+        .form-container input:focus {
+            border-color: #ff9671;
+            box-shadow: 0 0 5px rgba(255, 150, 113, 0.5);
+        }
+        .form-container .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            padding: 10px 15px;
+            font-size: 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .form-container .btn-primary:hover {
+            background: linear-gradient(135deg, #764ba2, #667eea);
+            transform: scale(1.05);
+        }
+        .alert-success {
+            position: absolute;
+            top: -40px;
+            right: 10px;
+            width: auto;
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
+    <div class="form-container">
+     
         <h2>Register</h2>
-         <?php
-        // session_start();
-        // if (isset($_SESSION['error'])) {
-        //     echo "<div class='alert alert-danger'>{$_SESSION['error']}</div>";
-        //     unset($_SESSION['error']);
-        // }
-        // if (isset($_SESSION['success'])) {
-        //     echo "<div class='alert alert-success'>{$_SESSION['success']}</div>";
-        //     unset($_SESSION['success']);
-        // }
-        ?>  
+       
         <form action="register.php" method="POST">
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
-                <input type="text" class="form-control" id="username" name="username" required>
+                <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required>
             </div>
             <div class="mb-3">
                 <label for="email" class="form-label">Email address</label>
-                <input type="email" class="form-control" id="email" name="email" required>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" name="password" required>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
             </div>
-            <button type="submit" class="btn btn-primary">Register</button>
+            <button type="submit" class="btn btn-primary w-100">Register</button>
         </form>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

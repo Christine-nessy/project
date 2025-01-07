@@ -42,13 +42,67 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verify 2FA</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            background-color: #ffffff;
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #343a40;
+            margin-bottom: 20px;
+        }
+
+        p {
+            text-align: center;
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            font-weight: bold;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+
+        .form-label {
+            font-weight: bold;
+            color: #495057;
+        }
+
+        .form-control {
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+        }
+
+        .alert {
+            font-size: 14px;
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-    <h2>Two-Factor Authentication</h2>
-    <div class="container mt-5">
+    <div class="container">
         <h2>Two-Factor Authentication</h2>
-          <!-- Display error or success messages -->
-          <?php
+        <!-- Display error or success messages -->
+        <?php
         if (isset($_SESSION['error'])) {
             echo "<div class='alert alert-danger'>{$_SESSION['error']}</div>";
             unset($_SESSION['error']);
@@ -63,7 +117,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <form action="verify_2fa.php" method="POST">
             <div class="mb-3">
                 <label for="2fa_code" class="form-label">Enter 2FA Code</label>
-                <input type="text" class="form-control" id="2fa_code" name="2fa_code" required>
+                <input type="text" class="form-control" id="2fa_code" name="2fa_code" placeholder="Enter your 6-digit code" required>
             </div>
             <button type="submit" class="btn btn-primary">Verify</button>
         </form>
