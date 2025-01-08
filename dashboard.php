@@ -16,14 +16,15 @@ if (!isset($_SESSION['username'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background: linear-gradient(135deg, #89f7fe, #66a6ff);
-            font-family: Arial, sans-serif;
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
+            background: url('images/rb_45678.png') no-repeat center center fixed;
+    background-size: cover; /* Ensures the image covers the entire background */
+    font-family: Arial, sans-serif;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
         }
         .dashboard-container {
             background-color: #ffffff;
