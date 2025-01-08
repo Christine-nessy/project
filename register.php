@@ -71,11 +71,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user = new User($db);
 
    
-    // // Store to database
-    // if ($user->createUser($username, $email, $hashedPassword)) {
-    //     // Generate 2FA code and send email
-    //     $twoFACode = rand(100000, 999999); // Generate a 6-digit random code
-    //     $user->store2FACode($email, $twoFACode); // Assuming this method stores the code in the DB
+     // Store to database
+     if ($user->createUser($username, $email, $hashedPassword)) {
+        // Generate 2FA code and send email
+        $twoFACode = rand(100000, 999999); // Generate a 6-digit random code
+        $user->store2FACode($email, $twoFACode); // Assuming this method stores the code in the DB
         
         // Send the code via email
          send2FACode($email, $twoFACode);
