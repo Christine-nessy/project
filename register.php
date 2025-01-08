@@ -54,13 +54,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Basic validation
     if (empty($username) || empty($email) || empty($password)) {
         echo "All fields are required.";
-        header("Location: registration.php");
+        header("Location: register.php");
         exit;
     }
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         echo "Invalid email format.";
-        header("Location: registration.php");
+        header("Location: register.php");
         exit;
     }
 
@@ -84,8 +84,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
          header("Location: verify_2fa.php");
          exit;
      } else {
-    //     echo "Error registering user.";
-    // }
+        echo "Error registering user.";
+    }
  
 }
 ?>

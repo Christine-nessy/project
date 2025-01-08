@@ -6,21 +6,22 @@ require 'C:\Apache24\htdocs\project\PHPMailer\vendor\autoload.php';
 
 session_start(); // Start the session at the beginning of the script
 
+//$userId = $_SESSION['user_id']; // Retrieve the user_id from the session
 // Check if user_id exists in session before proceeding
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['username'])) {
     echo "You are not logged in or the session has expired. Please log in first.";
     header("Location: login.php"); // Redirect to the login page
     exit;
 }
 
-$userId = $_SESSION['user_id']; // Retrieve the user_id from the session
+
 
 // Handle form submission for 2FA verification
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $enteredCode = trim($_POST['2fa_code']); // Retrieve and sanitize the entered 2FA code
 
     // Instantiate the Database and User classes
-    $db = new Database('PDO', 'localhost', '3308', 'root', 'root', 'user_data');
+   // $db = new Database('PDO', 'localhost', '3308', 'root', 'root', 'user_data');
     $user = new User($db);
 
     // Verify the 2FA code

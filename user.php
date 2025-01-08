@@ -27,6 +27,7 @@ class User
         // Execute the query and check if it was successful
         if ($stmt->execute()) {
             echo "User registered successfully!";
+            $_SESSION['username']=$username;
             return true; // Return true if the query was successful
         } else {
             // If there's an error, display it
