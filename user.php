@@ -147,5 +147,20 @@ class User
         $stmt->bindParam(':expiryTime', $expiryTime);
         return $stmt->execute();
     }
-    
+    // Verify if the reset code is valid and not expired
+    public function verifyResetCode($code) {
+        $query = "SELECT email, reset_code_expiry FROM users WHERE reset_code = :code";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':code', $code);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if ($result) {
+            $expiryTime = $result['reset_code_expiry'];
+            if (strtotime($expiryTime) > time()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
