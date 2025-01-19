@@ -65,6 +65,7 @@ class User
          // Send the 2FA code to the user's email
          $this->send2FACode($email, $code);
      }
+    
  
      // Function to verify the 2FA code entered by the user
      public function verify2FACode($userId, $enteredCode)
@@ -128,6 +129,23 @@ class User
     
         return false; // Return false if authentication fails
     }
-    
+
+    // Check if the email exists in the database
+    public function emailExists($email) {
+        $query = "SELECT id FROM users WHERE email = :email";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':email', $email);
+        $stmt->execute();
+        return $stmt->rowCount() > 0;
+    }
+    // Store the reset code and expiry time for the user
+    public function storeResetCode($email, $resetCode, $expiryTime) {
+        $query = "UPDATE users SET reset_code = :resetCode, reset_code_expiry = :expiryTime WHERE email = :email";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':resetCode', $resetCode);
+        $stmt->bindParam(':expiryTime', $expiryTime);
+        return $stmt->execute();
+    }
     
 }
