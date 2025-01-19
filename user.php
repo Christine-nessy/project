@@ -163,4 +163,24 @@ class User
         }
         return false;
     }
+    // Reset the user's password
+    public function resetPassword($resetCode, $newPassword) {
+        $query = "SELECT email FROM users WHERE reset_code = :resetCode";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':resetCode', $resetCode);
+        $stmt->execute();
+        
+        if ($stmt->rowCount() > 0) {
+            $email = $stmt->fetchColumn();
+            $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+
+            // Update the password in the database
+            $updateQuery = "UPDATE users SET password = :password, reset_code = NULL, reset_code_expiry = NULL WHERE email = :email";
+            $updateStmt = $this->db->prepare($updateQuery);
+            $updateStmt->bindParam(':password', $hashedPassword);
+            $updateStmt->bindParam(':email', $email);
+            return $updateStmt->execute();
+        }
+        return false;
+    }
 }
