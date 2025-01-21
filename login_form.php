@@ -99,6 +99,10 @@ if (isset($_SESSION['username'])) {
             </div>
             <button type="submit" class="btn btn-primary">Login</button>
         </form>
+        div class="forgot-password">
+            <a href="forgot_password.php">Forgot your password?</a>
+        </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

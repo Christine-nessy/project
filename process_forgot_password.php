@@ -14,7 +14,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $expiryTime = date('Y-m-d H:i:s', strtotime('+10 minutes')); // Code expiry time
 
         if ($user->storeResetCode($email, $resetCode, $expiryTime)) {
-            $resetLink = "http://yourwebsite.com/verify_code.php?code=$resetCode"; // Change the link to your website
+            $resetLink = "http://localhost/project/verify_code.php?code=$resetCode"; // Change the link to your website
+            
 
             // Send reset link via email
             mail($email, "Password Reset", "Click the link to reset your password: $resetLink");
