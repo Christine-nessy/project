@@ -1,4 +1,10 @@
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+require 'C:\Apache24\htdocs\project\PHPMailer\vendor\autoload.php';
+
 
 class User
 {
@@ -44,10 +50,39 @@ class User
      // Function to send the 2FA code via email
      public function send2FACode($email, $code)
      {
-         $subject = "Your 2FA Code";
+        
+         /*$subject = "Your 2FA Code";
          $message = "Your two-factor authentication code is: $code";
-         mail($email, $subject, $message);
+         mail($email, $subject, $message);*/
+         $mail = new PHPMailer(true);
+
+         try {
+             // Server settings
+             $mail->isSMTP();
+             $mail->Host = 'smtp.gmail.com'; // Replace with your SMTP server
+             $mail->SMTPAuth = true;
+             $mail->Username = 'christinemungla16@gmail.com'; // Replace with your SMTP username
+             $mail->Password = 'bksagxgtoopsyzzl'; // Replace with your SMTP password
+             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+             $mail->Port = 465;
+     
+             // Recipients
+             $mail->setFrom('christinemungla16@gmail.com', 'HookedByNessy');
+             $mail->addAddress($email);
+     
+             // Content
+             $mail->isHTML(true);
+             $mail->Subject = 'Your Forget Password  2FA Verification Code';
+             $mail->Body = "Your 2FA verification code is: <b>$code</b>";
+             $mail->AltBody = "Your 2FA verification code is: $code";
+     
+             $mail->send();
+             echo '2FA code has been sent to your email.';
+         } catch (Exception $e) {
+             echo "Error sending 2FA code: {$mail->ErrorInfo}";
+         }
      }
+     
  
      // Function to start the 2FA process: Generate the code, save it, and send it to the user
      public function start2FA($userId, $email)
@@ -136,7 +171,8 @@ class User
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':email', $email);
         $stmt->execute();
-        return $stmt->rowCount() > 0;
+       // return $stmt->rowCount() > 0;
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     // Store the reset code and expiry time for the user
     public function storeResetCode($email, $resetCode, $expiryTime) {
@@ -163,6 +199,9 @@ class User
         }
         return false;
     }
+ 
+
+
     // Reset the user's password
     public function resetPassword($resetCode, $newPassword) {
         $query = "SELECT email FROM users WHERE reset_code = :resetCode";

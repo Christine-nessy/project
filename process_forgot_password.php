@@ -8,6 +8,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = trim($_POST['email']);
     $db = new Database('PDO', 'localhost', '3308', 'root', 'root', 'user_data');
     $user = new User($db);
+    
+   
 
     if ($user->emailExists($email)) {
         $resetCode = bin2hex(random_bytes(16)); // Unique reset code
@@ -16,9 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($user->storeResetCode($email, $resetCode, $expiryTime)) {
             $resetLink = "http://localhost/project/verify_code.php?code=$resetCode"; // Change the link to your website
             
-
+           $user->send2FACode($email,$resetCode);
             // Send reset link via email
-            mail($email, "Password Reset", "Click the link to reset your password: $resetLink");
+           // mail($email, "Password Reset", "Click the link to reset your password: $resetLink");
 
             $_SESSION['message'] = "A reset link has been sent to your email.";
             header("Location: message.php"); // Show the success message on a new page
