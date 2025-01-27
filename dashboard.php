@@ -22,9 +22,10 @@ if (!isset($_SESSION['username'])) {
     height: 100%;
     background: linear-gradient(
         to bottom, 
-        rgba(181, 219, 196, 0.8), /* Light mint green at the top */
-        rgba(180, 120, 146, 0.7), /* Softer green in the middle */
-        rgba(60, 107, 120, 0.6)   /* Darker green at the bottom */
+        rgba(243, 215, 244, 0.8),
+        rgba(243, 215, 244, 0.8), /* Light mint green at the top */
+        rgba(180, 120, 146, 0.7) /* Softer green in the middle */
+          
     );
     backdrop-filter: blur(10px); /* Frosted glass effect */
     padding: 15px;

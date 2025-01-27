@@ -16,16 +16,18 @@ if (isset($_SESSION['username'])) {
     <title>Login</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <style>
-        body {
-            background: url('images/rb_45678.png') no-repeat center center fixed;
-            font-family: 'Arial', sans-serif;
-            height: 100vh;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #fff;
-        }
+     body {
+    background: url('images/HookedByNessy.png') no-repeat center center fixed;
+    background-size: cover; /* Ensures the image covers the entire page */
+    background-position: center center; /* Ensures the image is centered */
+    font-family: 'Arial', sans-serif;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
 
         .glass-effect {
             background: rgba(255, 255, 255, 0.1);

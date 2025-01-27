@@ -22,7 +22,8 @@ $products = [
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(to bottom, #f8f9fa, #e0e7f5);
+             background: linear-gradient(to bottom, #f8f9fa, #e0e7f5); 
+           
             color: #333;
         }
         .navbar {
