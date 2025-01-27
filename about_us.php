@@ -11,7 +11,10 @@ session_start();
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(to bottom, #f8f9fa, #e0e7f5);
+            background: url('images/rb_45678.png') no-repeat center center fixed;
+            background-size: cover;
+            background-position: center center;
+            /* background: linear-gradient(to bottom, #f8f9fa, #e0e7f5); */
             color: #333;
             margin: 0;
             padding: 0;
@@ -20,9 +23,9 @@ session_start();
             
             background: linear-gradient(
         to bottom, 
-        rgba(181, 219, 196, 0.8), /* Light mint green at the top */
-        rgba(180, 120, 146, 0.7), /* Softer green in the middle */
-        rgba(60, 107, 120, 0.6)   /* Darker green at the bottom */
+        rgba(243, 215, 244, 0.8),
+        rgba(243, 215, 244, 0.8), /* Light mint green at the top */
+        rgba(180, 120, 146, 0.7)   /* Darker green at the bottom */
     );
         }
         .navbar .navbar-brand, .navbar .nav-link {

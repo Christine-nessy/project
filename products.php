@@ -29,9 +29,9 @@ $products = [
         .navbar {
             background: linear-gradient(
         to bottom, 
-        rgba(181, 219, 196, 0.8), /* Light mint green at the top */
-        rgba(180, 120, 146, 0.7), /* Softer green in the middle */
-        rgba(60, 107, 120, 0.6)   /* Darker green at the bottom */
+        rgba(243, 215, 244, 0.8),
+        rgba(243, 215, 244, 0.8), /* Light mint green at the top */
+        rgba(180, 120, 146, 0.7)  /* Darker green at the bottom */
             )
         }
         .navbar .navbar-brand, .navbar .nav-link {
@@ -67,7 +67,7 @@ $products = [
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="navbar-brand" href="#">Yarn Creations</a>
+            <a class="navbar-brand" href="#">HookedByNessy</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
