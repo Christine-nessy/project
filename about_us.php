@@ -58,14 +58,14 @@ session_start();
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="navbar-brand" href="#">Yarn Creations</a>
+            <a class="navbar-brand" href="#">HookedByNessy</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.php">Home</a>
+                        <a class="nav-link" href="dashboard.php">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="about_us.php">About Us</a>
@@ -80,7 +80,24 @@ session_start();
             </div>
         </div>
     </nav>
-
+  <!-- About Us Section -->
+  <div class="about-us-section">
+        <img src="images/yarn_logo.png" alt="Yarn Logo">
+        <h1>About Us</h1>
+        <p>
+            Welcome to Yarn Creations! We are passionate about bringing color and creativity to your crafting journey. 
+            With our premium-quality yarns, we aim to inspire crafters of all levels to create beautiful, unique projects 
+            that bring joy and comfort to their lives.
+        </p>
+        <p>
+            Our mission is to provide a wide range of yarns, patterns, and tools that cater to every style and preference. 
+            Whether you're a seasoned knitter or just picking up a crochet hook for the first time, Yarn Creations is here 
+            to support and celebrate your creativity.
+        </p>
+        <p>
+            Thank you for choosing Yarn Creations for your crafting needs. Together, let's make something extraordinary!
+        </p>
+    </div>
   
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

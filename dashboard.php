@@ -63,7 +63,8 @@ if (!isset($_SESSION['username'])) {
     <div class="sidebar">
         <h4>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</h4>
         <a href="#">Dashboard</a>
-        <a href="#">AboutUs</a>
+        <a href="about_us.php">AboutUs</a>
+        <a href="about_us.php">Products</a>
         <a href="#">Catalogue</a>
         <a href="#">Settings</a>
         <a href="logout.php">Logout</a>
