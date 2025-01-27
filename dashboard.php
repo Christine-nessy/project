@@ -40,25 +40,46 @@ if (!isset($_SESSION['username'])) {
             padding: 20px;
         }
         .navbar {
-            background-color: #4a90e2;
-        }
-        .navbar .navbar-brand,
-        .navbar .nav-link {
-            color: white;
-        }
-        .navbar .nav-link:hover {
-            color: #ddd;
-        }
+        background-color: #4a90e2;
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 3px solid #357abd; /* Adds a subtle border for design */
+    }
+    .navbar .navbar-brand {
+        color: white;
+        font-size: 1.5rem;
+        font-weight: bold;
+        text-decoration: none;
+    }
+    .navbar .nav-links {
+        display: flex;
+        gap: 15px; /* Adds space between the links */
+    }
+    .navbar .nav-link {
+        color: white;
+        font-size: 1.1rem;
+        font-weight: 500;
+        text-decoration: none;
+        padding: 5px 10px;
+        transition: color 0.3s ease, background-color 0.3s ease;
+        border-radius: 5px;
+    }
+    .navbar .nav-link:hover {
+        color: #4a90e2;
+        background-color: white;
+    }
     </style>
 </head>
 <body>
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">My Dashboard</a>
+            <!-- <a class="navbar-brand" href="#">My Dashboard</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
-            </button>
+            </button> -->
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
@@ -69,9 +90,6 @@ if (!isset($_SESSION['username'])) {
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Settings</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="logout.php">Logout</a>
                     </li>
                 </ul>
             </div>
@@ -90,13 +108,7 @@ if (!isset($_SESSION['username'])) {
 
     <!-- Main Content -->
     <div class="content">
-        <div class="dashboard-container">
-            <h1>Dashboard</h1>
-            <p>You are now logged in.</p>
-            <!-- Sliding Photos Carousel -->
-           
-            <a href="logout.php" class="mt-3 d-block">Logout</a>
-        </div>
+
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
