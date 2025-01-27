@@ -17,92 +17,55 @@ if (!isset($_SESSION['username'])) {
             margin: 0;
         }
         .sidebar {
-            width: 250px;
-            position: fixed;
-            height: 100%;
-            background-color: #4a90e2;
-            padding: 15px;
-            color: white;
-        }
-        .sidebar a {
-            color: white;
-            text-decoration: none;
-            display: block;
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 5px;
-        }
-        .sidebar a:hover {
-            background-color: #357abd;
-        }
-        .content {
-            margin-left: 250px;
-            padding: 20px;
-        }
-        .navbar {
-        background-color: #4a90e2;
-        padding: 10px 20px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border-bottom: 3px solid #357abd; /* Adds a subtle border for design */
-    }
-    .navbar .navbar-brand {
-        color: white;
-        font-size: 1.5rem;
-        font-weight: bold;
+    width: 250px;
+    position: fixed;
+    height: 100%;
+    background: linear-gradient(
+        to bottom, 
+        rgba(181, 219, 196, 0.8), /* Light mint green at the top */
+        rgba(180, 120, 146, 0.7), /* Softer green in the middle */
+        rgba(60, 107, 120, 0.6)   /* Darker green at the bottom */
+    );
+    backdrop-filter: blur(10px); /* Frosted glass effect */
+    padding: 15px;
+    color: black;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    border-right: 1px solid rgba(255, 255, 255, 0.2); /* Soft border effect */
+}
+
+    .sidebar a {
+        color: black;
         text-decoration: none;
-    }
-    .navbar .nav-links {
-        display: flex;
-        gap: 15px; /* Adds space between the links */
-    }
-    .navbar .nav-link {
-        color: white;
-        font-size: 1.1rem;
-        font-weight: 500;
-        text-decoration: none;
-        padding: 5px 10px;
-        transition: color 0.3s ease, background-color 0.3s ease;
+        display: block;
+        margin: 10px 0;
+        padding: 10px;
         border-radius: 5px;
+        transition: background-color 0.3s ease, transform 0.2s ease;
     }
-    .navbar .nav-link:hover {
-        color: #4a90e2;
-        background-color: white;
+    .sidebar a:hover {
+        background-color: rgba(53, 122, 189, 0.7);
+        transform: scale(1.05); /* Slight zoom on hover */
     }
+
+    /* Content Area */
+    .content {
+        margin-left: 250px;
+        padding: 20px;
+    }
+
+    
     </style>
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg">
-        <div class="container-fluid">
-            <!-- <a class="navbar-brand" href="#">My Dashboard</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button> -->
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Settings</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+   
 
     <!-- Sidebar -->
     <div class="sidebar">
         <h4>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</h4>
         <a href="#">Dashboard</a>
-        <a href="#">Messages</a>
-        <a href="#">Tasks</a>
-        <a href="#">Notifications</a>
+        <a href="#">AboutUs</a>
+        <a href="#">Catalogue</a>
+        <a href="#">Settings</a>
         <a href="logout.php">Logout</a>
     </div>
 
