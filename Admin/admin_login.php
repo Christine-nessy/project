@@ -1,5 +1,7 @@
 <?php
+include('../database.php');
 session_start();
+
 
 // Check if admin is already logged in
 if (isset($_SESSION['admin_logged_in'])) {
@@ -7,30 +9,45 @@ if (isset($_SESSION['admin_logged_in'])) {
     exit;
 }
 
-// Database connection
-include 'db_connection.php';
 
 // Handle login form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];
     $password = $_POST['password'];
+     // create a Database instance and retrieve the connection
+     $db_instance = new Database('PDO', 'localhost', '3308', 'root', 'root', 'user_data');
+     $db = $db_instance->getConnection();
+ 
 
-    // Validate credentials
-    $stmt = $conn->prepare("SELECT * FROM admins WHERE username = ? AND password = ?");
-    $stmt->bind_param("ss", $username, $password);
+    // Validate credentials using PDO
+    $stmt = $db->prepare("SELECT * FROM admins WHERE username = :username AND password = :password");
+
+    // Bind parameters using PDO
+    $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+    $stmt->bindParam(':password', $password, PDO::PARAM_STR);
+
+    // Execute the query
     $stmt->execute();
-    $result = $stmt->get_result();
 
-    if ($result->num_rows > 0) {
+    // Fetch the result (since we are using PDO, fetch results manually)
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($result) {
+        // If login is successful, store session variable and redirect
         $_SESSION['admin_logged_in'] = true;
         header("Location: admin_dashboard.php");
         exit;
     } else {
+        // If credentials are incorrect
         $error = "Invalid username or password.";
     }
 
-    $stmt->close();
+    
 }
+
+
+
+
 ?>
 
 <!DOCTYPE html>

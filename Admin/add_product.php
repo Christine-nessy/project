@@ -1,10 +1,12 @@
 <?php
+include 'admin_auth.php'; // Ensure admin is logged in
+include '../database.php'; // Include database connection
 // Start the session
-session_start();
+
 
 // Check if the admin is logged in (optional)
 if (!isset($_SESSION['admin_logged_in'])) {
-    header("Location: login.php");
+    header("Location: admin_login.php");
     exit;
 }
 
@@ -15,22 +17,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $description = $_POST['description'];
     $price = $_POST['price'];
     $image_url = $_POST['image_url'];
+    // create a Database instance and retrieve the connection
+    $db_instance = new Database('PDO', 'localhost', '3308', 'root', 'root', 'user_data');
+    $db = $db_instance->getConnection();
 
     // Validate inputs
     if (empty($name) || empty($price)) {
         $error = "Name and price are required.";
     } else {
+        // Example values (You should retrieve these from your form)
+$name = $_POST['name'];
+$price = $_POST['price'];
+$description = $_POST['description']; 
         // Insert the product into the database
-        $stmt = $conn->prepare("INSERT INTO products (name, description, price, image_url) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("ssds", $name, $description, $price, $image_url);
+        $stmt = $db->prepare("INSERT INTO products (name, description, price, image_url) VALUES (?, ?, ?, ?)");
+        // Bind parameters
+$stmt->bindParam(':name', $name);
+$stmt->bindParam(':price', $price);
+$stmt->bindParam(':description', $description);
 
-        if ($stmt->execute()) {
-            $success = "Product added successfully.";
-        } else {
-            $error = "Error: " . $stmt->error;
-        }
 
-        $stmt->close();
     }
 }
 
