@@ -17,8 +17,8 @@ if (isset($_SESSION['username'])) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <style>
         body {
+            background: url('images/rb_45678.png') no-repeat center center fixed;
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(to right, #084590, #887bfe);
             height: 100vh;
             margin: 0;
             display: flex;
@@ -32,9 +32,14 @@ if (isset($_SESSION['username'])) {
             backdrop-filter: blur(10px);
             border-radius: 15px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-            padding: 30px;
-            max-width: 400px;
+            padding: 40px;
+            max-width: 450px;
             width: 100%;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .glass-effect:hover {
+            transform: scale(1.05);
         }
 
         .form-label {
@@ -47,12 +52,23 @@ if (isset($_SESSION['username'])) {
             color: black;
             border: 1px solid rgba(255, 255, 255, 0.5);
             margin-bottom: 15px;
+            padding: 12px;
         }
 
         .form-control:focus {
             background-color: rgba(255, 255, 255, 0.4);
             border-color: #007bff;
             box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        .forgot-password a {
+            color: black;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .forgot-password a:hover {
+            color: #007bff;
         }
 
         .btn-primary {
@@ -62,11 +78,12 @@ if (isset($_SESSION['username'])) {
             font-size: 16px;
             font-weight: bold;
             width: 100%;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
 
         .btn-primary:hover {
             background-color: #0056b3;
+            transform: translateY(-2px);
         }
 
         h2 {
@@ -79,8 +96,12 @@ if (isset($_SESSION['username'])) {
 
         @media (max-width: 576px) {
             .glass-effect {
-                padding: 20px;
-                max-width: 350px;
+                padding: 30px;
+                max-width: 90%;
+            }
+
+            h2 {
+                font-size: 24px;
             }
         }
     </style>
@@ -99,7 +120,7 @@ if (isset($_SESSION['username'])) {
             </div>
             <button type="submit" class="btn btn-primary">Login</button>
         </form>
-        div class="forgot-password">
+        <div class="forgot-password mt-3">
             <a href="forgot_password.php">Forgot your password?</a>
         </div>
     </div>
