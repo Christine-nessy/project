@@ -17,10 +17,16 @@ session_start();
             padding: 0;
         }
         .navbar {
-            background-color: #4a90e2;
+            
+            background: linear-gradient(
+        to bottom, 
+        rgba(181, 219, 196, 0.8), /* Light mint green at the top */
+        rgba(180, 120, 146, 0.7), /* Softer green in the middle */
+        rgba(60, 107, 120, 0.6)   /* Darker green at the bottom */
+    );
         }
         .navbar .navbar-brand, .navbar .nav-link {
-            color: white !important;
+            color: black !important;
         }
         .navbar .nav-link:hover {
             color: #ddd !important;
@@ -36,7 +42,7 @@ session_start();
             text-align: center;
         }
         .about-us-section h1 {
-            color: #4a90e2;
+            color: black;
             font-size: 2.5rem;
             margin-bottom: 20px;
         }
@@ -82,10 +88,10 @@ session_start();
     </nav>
   <!-- About Us Section -->
   <div class="about-us-section">
-        <img src="images/yarn_logo.png" alt="Yarn Logo">
+        <img src="images/nessy.png" alt="Yarn Logo">
         <h1>About Us</h1>
         <p>
-            Welcome to Yarn Creations! We are passionate about bringing color and creativity to your crafting journey. 
+            Welcome to HookedByNessy! We are passionate about bringing color and creativity to your crafting journey. 
             With our premium-quality yarns, we aim to inspire crafters of all levels to create beautiful, unique projects 
             that bring joy and comfort to their lives.
         </p>
@@ -95,7 +101,7 @@ session_start();
             to support and celebrate your creativity.
         </p>
         <p>
-            Thank you for choosing Yarn Creations for your crafting needs. Together, let's make something extraordinary!
+            Thank you for choosing HookedByNessy for your crafting needs. Together, let's make something extraordinary!
         </p>
     </div>
   
