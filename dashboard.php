@@ -94,27 +94,7 @@ if (!isset($_SESSION['username'])) {
             <h1>Dashboard</h1>
             <p>You are now logged in.</p>
             <!-- Sliding Photos Carousel -->
-            <div id="photoCarousel" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <img src="images/Nessy.png" class="d-block w-100" alt="Photo 1">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="images/Nessy.png" class="d-block w-100" alt="Photo 2">
-                    </div>
-                    <div class="carousel-item">
-                        <img src="images/Nessy.png" class="d-block w-100" alt="Photo 3">
-                    </div>
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#photoCarousel" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#photoCarousel" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
-            </div>
+           
             <a href="logout.php" class="mt-3 d-block">Logout</a>
         </div>
     </div>
