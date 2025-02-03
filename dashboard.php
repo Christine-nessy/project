@@ -67,7 +67,7 @@ if (!isset($_SESSION['username'])) {
         <a href="about_us.php">AboutUs</a>
         <a href="products.php">Products</a>
         <a href="#">Catalogue</a>
-        <a href="#">Settings</a>
+        <a href="Settings.php">Settings</a>
         <a href="logout.php">Logout</a>
     </div>
 

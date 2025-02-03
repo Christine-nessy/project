@@ -3,7 +3,6 @@ include 'admin_auth.php'; // Ensure admin is logged in
 include '../database.php'; // Include database connection
 // Start the session
 
-
 // Check if the admin is logged in (optional)
 if (!isset($_SESSION['admin_logged_in'])) {
     header("Location: admin_login.php");
@@ -11,35 +10,87 @@ if (!isset($_SESSION['admin_logged_in'])) {
 }
 
 
+
 // Handle form submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $name = $_POST['name'];
     $description = $_POST['description'];
     $price = $_POST['price'];
-    $image_url = $_POST['image_url'];
-    // create a Database instance and retrieve the connection
+    $image = $_FILES['image']; // File upload input
+
+    // Create a Database instance and retrieve the connection
     $db_instance = new Database('PDO', 'localhost', '3308', 'root', 'root', 'user_data');
     $db = $db_instance->getConnection();
 
     // Validate inputs
     if (empty($name) || empty($price)) {
         $error = "Name and price are required.";
-    } else {
-        // Example values (You should retrieve these from your form)
-$name = $_POST['name'];
-$price = $_POST['price'];
-$description = $_POST['description']; 
-        // Insert the product into the database
-        $stmt = $db->prepare("INSERT INTO products (name, description, price, image_url) VALUES (?, ?, ?, ?)");
-        // Bind parameters
-$stmt->bindParam(':name', $name);
-$stmt->bindParam(':price', $price);
-$stmt->bindParam(':description', $description);
+    } elseif ($image['error'] !== UPLOAD_ERR_OK) {
+        $error = "Error uploading the image.";
+    } 
+    else{
+        $imageData = file_get_contents($image['tmp_name']); // Read file content
+        $base64Image = base64_encode($imageData); // Convert to Base64
+ // Insert the product into the database
+ $stmt = $db->prepare("INSERT INTO products (name, description, price, image_url) VALUES (:name, :description, :price, :image_url)");
+ $stmt->bindParam(':name', $name);
+ $stmt->bindParam(':description', $description);
+ $stmt->bindParam(':price', $price);
+ $stmt->bindParam(':image_url', $base64Image);
+ 
+ 
 
+ if ($stmt->execute()) {
+     $success = "Product added successfully!";
+ } else {
+     $error = "Failed to add the product. Please try again.";
+ }
 
     }
-}
+    
+    /*
+    elseif ($image['error'] !== UPLOAD_ERR_OK) {
+        $error = "Error uploading the image.";
+    } 
+    else {
+        // Handle file upload
+        $upload_dir = 'uploads/'; // Directory where images will be stored
+        if (!is_dir($upload_dir)) {
+            mkdir($upload_dir, 0777, true); // Create the directory if it doesn't exist
+        }
 
+        $file_name = basename($image['name']);
+        $target_file = $upload_dir . time() . '_' . $file_name;
+
+        // Check file type
+        $file_type = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+        echo "Upload file type: $file_type";
+        $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
+
+        if (!in_array($file_type, $allowed_types)) {
+            $error = "Only JPG, JPEG, PNG, and GIF files are allowed.";
+        } elseif (move_uploaded_file($image['tmp_name'], $target_file)) {
+            // Insert the product into the database
+            $stmt = $db->prepare("INSERT INTO products (name, description, price, image_url) VALUES (:name, :description, :price, :image_url)");
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':description', $description);
+            $stmt->bindParam(':price', $price);
+            $stmt->bindParam(':image_url', $target_file);
+            
+            
+
+            if ($stmt->execute()) {
+                $success = "Product added successfully!";
+            } else {
+                $error = "Failed to add the product. Please try again.";
+            }
+        } else {
+            $error = "Failed to upload the image.";
+        }
+        
+        
+    }*/
+}
 ?>
 
 <!DOCTYPE html>
@@ -62,7 +113,7 @@ $stmt->bindParam(':description', $description);
             <div class="alert alert-success"><?php echo htmlspecialchars($success); ?></div>
         <?php endif; ?>
 
-        <form method="POST" action="">
+        <form method="POST"  enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="name" class="form-label">Product Name</label>
                 <input type="text" class="form-control" id="name" name="name" required>
@@ -79,8 +130,8 @@ $stmt->bindParam(':description', $description);
             </div>
 
             <div class="mb-3">
-                <label for="image_url" class="form-label">Image URL</label>
-                <input type="url" class="form-control" id="image_url" name="image_url">
+                <label for="image" class="form-label">Product Image</label>
+                <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
             </div>
 
             <button type="submit" class="btn btn-primary">Add Product</button>

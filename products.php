@@ -1,16 +1,20 @@
 <?php
+include 'database.php';
 // Array of products (You can replace this with a database connection if needed)
-$products = [
-    ["name" => "Cotton Yarn", "price" => 5.99, "image" => "images/milk.jpg"],
-    ["name" => "Wool Yarn", "price" => 7.49, "image" => "images/green_yarn.jpg"],
-    ["name" => "Acrylic Yarn", "price" => 3.99, "image" => "images/chunky.jpg"],
-    ["name" => "Silk Yarn", "price" => 12.99, "image" => "images/colourful.jpg"],
-    ["name" => "Bikini Set", "price" => 39.99, "image" => "images/bikini.jpg"],
-    ["name" => "Purple Dress", "price" => 59.99, "image" => "images/dress.jpg"],
-    ["name" => "Flower Set", "price" => 99.99, "image" => "images/set.jpg"],
-    ["name" => "Triple Tulip", "price" => 79.99, "image" => "images/triple.jpg"],
-    ["name" => "Sweater", "price" => 89.99, "image" => "images/sweater.jpg"]
-];
+$db_instance = new Database('PDO', 'localhost', '3308', 'root', 'root', 'user_data');
+$db = $db_instance->getConnection();
+
+// Fetch product data from the database
+$stmt = $db->prepare("SELECT name, price, image_url FROM products ");
+//$stmt->bindParam(':product_id', $_GET['product_id']);  Assuming product ID is passed in the URL
+$stmt->execute();
+$products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Check if product exists
+
+   // $imageBase64 = $products['image_url']; Get the Base64 image string from the database
+    $imageType = 'image/jpeg'; // Assuming the image is a JPEG (adjust as needed)
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -94,15 +98,18 @@ $products = [
     <div class="container mt-5">
         <h1 class="text-center mb-4">Our Products</h1>
         <div class="row">
-            <?php foreach ($products as $product): ?>
+        <?php if (isset($error)): ?>
+            <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
+        <?php endif; ?>
+        <?php foreach ($products as $product): ?>
                 <div class="col-md-4 mb-4">
                     <div class="product-card">
-                        <img src="<?php echo $product['image']; ?>" alt="<?php echo $product['name']; ?>">
+                        <img src="data:<?php echo $imageType; ?>;base64,<?php echo $product['image_url']; ?>" alt="<?php echo $product['name']; ?>">
                         <h5><?php echo $product['name']; ?></h5>
                         <p class="text-muted">$<?php echo number_format($product['price'], 2); ?></p>
                     </div>
                 </div>
-            <?php endforeach; ?>
+                <?php endforeach; ?>
         </div>
     </div>
 
