@@ -36,7 +36,7 @@ if (isset($_POST['product_id']) && isset($_POST['quantity'])) {
                 ];
             }
 
-            header("Location: cart.php?success=Product added to cart");
+            header("Location: Cart/cart.php?success=Product added to cart");
             exit;
         } else {
             header("Location: products.php?error=Product not found");
