@@ -1,6 +1,7 @@
 <?php
 include 'admin_auth.php'; // Ensure admin is logged in
 include '../database.php'; // Include database connection
+include 'admin_nav.php';
 
 if (!isset($_SESSION['admin_logged_in'])) {
     header("Location: admin_login.php");

@@ -1,6 +1,7 @@
 <?php
 include 'admin_auth.php'; // Ensure admin is logged in
 include '../database.php'; // Include database connection
+include 'admin_nav.php';
 
 if (!isset($_SESSION['admin_logged_in'])) {
     header("Location: admin_login.php");
@@ -11,23 +12,23 @@ $db_instance = new Database('PDO', 'localhost', '3308', 'root', 'root', 'user_da
 $db = $db_instance->getConnection();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
-    $id = $_POST['id'];
+    $id = $_POST['product_id'];
 
-    $stmt = $db->prepare("DELETE FROM products WHERE product_id = :id");
-    $stmt->bindParam(':id', $id);
-
-    if ($stmt->execute()) {
-        echo json_encode(["success" => true, "message" => "Product deleted successfully!"]);
+    $stmt = $db->prepare("DELETE FROM products WHERE product_id = :product_id");
+    $stmt->bindParam(':product_id', $id);
+    $stmt->execute();
+    /*if($stmt) {
+    $msg=  json_encode(["success" => true, "message" => "Product deleted successfully!"]);
     } else {
         echo json_encode(["success" => false, "message" => "Failed to delete product."]);
     }
-    exit;
+    exit;*/
 }
 
 // Fetch all products
-$stmt = $db->prepare("SELECT product_id, name FROM products");
-$stmt->execute();
-$products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+//$stmt = $db->prepare("SELECT product_id, name FROM products");
+//$stmt->execute();
+//$products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>

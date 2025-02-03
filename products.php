@@ -5,7 +5,7 @@ $db_instance = new Database('PDO', 'localhost', '3308', 'root', 'root', 'user_da
 $db = $db_instance->getConnection();
 
 // Fetch product data from the database
-$stmt = $db->prepare("SELECT name, price, image_url FROM products ");
+$stmt = $db->prepare("SELECT product_id, name, price, image_url FROM products ");
 //$stmt->bindParam(':product_id', $_GET['product_id']);  Assuming product ID is passed in the URL
 $stmt->execute();
 $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -107,8 +107,8 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <img src="data:<?php echo $imageType; ?>;base64,<?php echo $product['image_url']; ?>" alt="<?php echo $product['name']; ?>">
                         <h5><?php echo $product['name']; ?></h5>
                         <p class="text-muted">$<?php echo number_format($product['price'], 2); ?></p>
-                        <form action="add_to_cart.php" method="POST">
-                            <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
+                        <form action="Cart/cart.php" method="POST">
+                            <input type="hidden" name="product_id" value="<?= $product['product_id'] ?>">
                             <input type="hidden" name="name" value="<?= htmlspecialchars($product['name']) ?>">
                             <input type="hidden" name="price" value="<?= $product['price'] ?>">
                             <button type="submit" class="btn btn-primary">Add to Cart</button>

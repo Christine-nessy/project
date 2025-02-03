@@ -1,6 +1,7 @@
 <?php
 include 'admin_auth.php'; // Ensure admin is logged in
 include '../database.php'; // Include database connection
+include 'admin_nav.php';
 // Start the session
 
 // Check if the admin is logged in (optional)

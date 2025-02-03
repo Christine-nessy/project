@@ -1,6 +1,7 @@
 <?php
 session_start();
 include '../database.php'; // Include database connection
+include 'admin_nav.php';
 
 if (isset($_POST['product_id']) && isset($_POST['quantity'])) {
     $product_id = $_POST['product_id'];
@@ -36,18 +37,18 @@ if (isset($_POST['product_id']) && isset($_POST['quantity'])) {
                 ];
             }
 
-            header("Location: Cart/cart.php?success=Product added to cart");
+            header("Location: ../Cart/cart.php?success=Product added to cart");
             exit;
         } else {
-            header("Location: products.php?error=Product not found");
+            header("Location: ../products.php?error=Product not found");
             exit;
         }
     } catch (PDOException $e) {
-        header("Location: products.php?error=Database error: " . $e->getMessage());
+        header("Location: ../products.php?error=Database error: " . $e->getMessage());
         exit;
     }
 } else {
-    header("Location: products.php?error=Invalid request");
+    header("Location: ../products.php?error=Invalid request");
     exit;
 }
 ?>
