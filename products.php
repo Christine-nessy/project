@@ -4,17 +4,22 @@ include 'database.php';
 $db_instance = new Database('PDO', 'localhost', '3308', 'root', 'root', 'user_data');
 $db = $db_instance->getConnection();
 
-// Fetch product data from the database
-$stmt = $db->prepare("SELECT product_id, name, price, image_url FROM products ");
-//$stmt->bindParam(':product_id', $_GET['product_id']);  Assuming product ID is passed in the URL
+// Check if a search term is provided
+$searchTerm = isset($_GET['search']) ? $_GET['search'] : '';
+
+// Fetch product data from the database with an optional search filter
+$query = "SELECT product_id, name, price, image_url FROM products";
+if ($searchTerm) {
+    $query .= " WHERE name LIKE :searchTerm"; // Filter products by name
+}
+
+$stmt = $db->prepare($query);
+if ($searchTerm) {
+    $stmt->bindValue(':searchTerm', '%' . $searchTerm . '%'); // Bind the search term
+}
 $stmt->execute();
 $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Check if product exists
-
-   // $imageBase64 = $products['image_url']; Get the Base64 image string from the database
-    $imageType = 'image/jpeg'; // Assuming the image is a JPEG (adjust as needed)
-
+$imageType = 'image/jpeg'; // Assuming the image is a JPEG (adjust as needed)
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -26,17 +31,16 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <style>
         body {
             font-family: Arial, sans-serif;
-             background: linear-gradient(to bottom, #f8f9fa, #e0e7f5); 
-           
+            background: linear-gradient(to bottom, #f8f9fa, #e0e7f5); 
             color: #333;
         }
         .navbar {
             background: linear-gradient(
-        to bottom, 
-        rgba(243, 215, 244, 0.8),
-        rgba(243, 215, 244, 0.8), /* Light mint green at the top */
-        rgba(180, 120, 146, 0.7)  /* Darker green at the bottom */
-            )
+                to bottom, 
+                rgba(243, 215, 244, 0.8),
+                rgba(243, 215, 244, 0.8), 
+                rgba(180, 120, 146, 0.7) 
+            );
         }
         .navbar .navbar-brand, .navbar .nav-link {
             color: black !important;
@@ -94,14 +98,22 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </nav>
 
-    <!-- Products Section -->
+    <!-- Search Bar Section -->
     <div class="container mt-5">
+        <form action="products.php" method="GET" class="d-flex justify-content-center mb-4">
+            <input type="text" name="search" class="form-control w-50" placeholder="Search products..." value="<?php echo htmlspecialchars($searchTerm); ?>">
+            <button type="submit" class="btn btn-primary ms-2">Search</button>
+        </form>
+
         <h1 class="text-center mb-4">Our Products</h1>
         <div class="row">
-        <?php if (isset($error)): ?>
-            <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
-        <?php endif; ?>
-        <?php foreach ($products as $product): ?>
+            <?php if (isset($error)): ?>
+                <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
+            <?php endif; ?>
+            <?php if (empty($products)): ?>
+                <p class="text-center">No products found.</p>
+            <?php endif; ?>
+            <?php foreach ($products as $product): ?>
                 <div class="col-md-4 mb-4">
                     <div class="product-card">
                         <img src="data:<?php echo $imageType; ?>;base64,<?php echo $product['image_url']; ?>" alt="<?php echo $product['name']; ?>">
@@ -115,7 +127,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </form>
                     </div>
                 </div>
-                <?php endforeach; ?>
+            <?php endforeach; ?>
         </div>
     </div>
 
