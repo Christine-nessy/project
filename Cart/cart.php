@@ -43,7 +43,8 @@ session_start();
                             <td>
                                 <form action="update_cart.php" method="POST">
                                     <input type="hidden" name="product_id" value="<?= intval($id); ?>">
-                                    <input type="number" name="quantity" value="<?= intval($item['quantity']); ?>" min="1">
+                                    <label for="quantity-<?= intval($id); ?>" class="form-label">Quantity</label>
+                                    <input type="number" id="quantity-<?= intval($id); ?>" name="quantity" value="<?= intval($item['quantity']); ?>" min="1" class="form-control">
                                     <button type="submit" class="btn btn-sm btn-success">Update</button>
                                 </form>
                             </td>
@@ -60,7 +61,7 @@ session_start();
             <h3>Total: $<?= number_format($total_price, 2); ?></h3>
             <a href="checkout.php" class="btn btn-primary">Proceed to Checkout</a>
         <?php else: ?>
-            <p>Your cart is empty.</p>
+            <p>Your cart is empty. <a href="../products.php">Browse products</a>.</p>
         <?php endif; ?>
     </div>
 </body>

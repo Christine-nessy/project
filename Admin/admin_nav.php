@@ -32,5 +32,6 @@ include 'admin_auth.php';
     <a href="update_product.php">Update Product</a>
     <a href="delete_product.php">Delete Product</a>
     <a href="view_products.php">View Product</a>
+    <a href="admin_orders.php">View Orders</a>
     <a href="logout.php">Logout</a>
 </div>
