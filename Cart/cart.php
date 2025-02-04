@@ -14,7 +14,7 @@ session_start();
     <div class="container mt-5">
         <h1>Shopping Cart</h1>
 
-        <?php if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])): ?>
+        <?php if (!empty($_SESSION['cart'])): ?>
             <table class="table">
                 <thead>
                     <tr>
@@ -34,19 +34,23 @@ session_start();
                         $total_price += $subtotal;
                     ?>
                         <tr>
-                            <td><img src="<?= $item['image']; ?>" width="50"></td>
+                            <td>
+                                <img src="<?= htmlspecialchars($item['image']); ?>" width="50" 
+                                     onerror="this.src='default.jpg';" alt="Product Image">
+                            </td>
                             <td><?= htmlspecialchars($item['name']); ?></td>
                             <td>$<?= number_format($item['price'], 2); ?></td>
                             <td>
                                 <form action="update_cart.php" method="POST">
-                                    <input type="hidden" name="product_id" value="<?= $id; ?>">
-                                    <input type="number" name="quantity" value="<?= $item['quantity']; ?>" min="1">
+                                    <input type="hidden" name="product_id" value="<?= intval($id); ?>">
+                                    <input type="number" name="quantity" value="<?= intval($item['quantity']); ?>" min="1">
                                     <button type="submit" class="btn btn-sm btn-success">Update</button>
                                 </form>
                             </td>
                             <td>$<?= number_format($subtotal, 2); ?></td>
                             <td>
-                                <a href="remove_from_cart.php?product_id=<?= $id; ?>" class="btn btn-sm btn-danger">Remove</a>
+                                <a href="remove_from_cart.php?product_id=<?= intval($id); ?>" 
+                                   class="btn btn-sm btn-danger">Remove</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
