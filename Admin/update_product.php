@@ -15,7 +15,7 @@ $db = $db_instance->getConnection();
 $product = null;
 
 // Step 1: Ask for Product ID if not provided
-if (!isset($_GET['id']) && $_SERVER['REQUEST_METHOD'] !== 'POST') {
+if (!isset($_GET['product_id']) && $_SERVER['REQUEST_METHOD'] !== 'POST') {
     ?>
     <!DOCTYPE html>
     <html lang="en">
@@ -30,7 +30,7 @@ if (!isset($_GET['id']) && $_SERVER['REQUEST_METHOD'] !== 'POST') {
             <form method="GET">
                 <div class="mb-3">
                     <label class="form-label">Product ID</label>
-                    <input type="number" class="form-control" name="id" required>
+                    <input type="number" class="form-control" name="product_id" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Fetch Product</button>
             </form>
@@ -42,11 +42,11 @@ if (!isset($_GET['id']) && $_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 // Step 2: Fetch product details
-$product_id = $_GET['id'] ?? $_POST['id'] ?? null;
+$product_id = $_GET['product_id'] ?? $_POST['product_id'] ?? null;
 
 if ($product_id) {
-    $stmt = $db->prepare("SELECT * FROM products WHERE id = :id");
-    $stmt->bindParam(':id', $product_id, PDO::PARAM_INT);
+    $stmt = $db->prepare("SELECT * FROM products WHERE product_id = :product_id");
+    $stmt->bindParam(':product_id', $product_id, PDO::PARAM_INT);
     $stmt->execute();
     $product = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -57,8 +57,8 @@ if ($product_id) {
 }
 
 // Step 3: Handle Update Request
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
-    $id = $_POST['id'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
+    $product_id = $_POST['product_id'];
     $name = $_POST['name'];
     $description = $_POST['description'];
     $price = $_POST['price'];
@@ -72,16 +72,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
             $imageData = file_get_contents($image['tmp_name']);
             $base64Image = base64_encode($imageData);
 
-            $stmt = $db->prepare("UPDATE products SET name = :name, description = :description, price = :price, image_url = :image_url WHERE id = :id");
+            $stmt = $db->prepare("UPDATE products SET name = :name, description = :description, price = :price, image_url = :image_url WHERE product_id = :product_id");
             $stmt->bindParam(':image_url', $base64Image);
         } else {
-            $stmt = $db->prepare("UPDATE products SET name = :name, description = :description, price = :price WHERE id = :id");
+            $stmt = $db->prepare("UPDATE products SET name = :name, description = :description, price = :price WHERE product_id = :product_id");
         }
 
         $stmt->bindParam(':name', $name);
         $stmt->bindParam(':description', $description);
         $stmt->bindParam(':price', $price);
-        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':product_id', $product_id);
 
         if ($stmt->execute()) {
             $success = "Product updated successfully!";
@@ -112,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
         <?php endif; ?>
 
         <form method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="id" value="<?php echo htmlspecialchars($product['id']); ?>">
+            <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($product['product_id']); ?>">
             
             <div class="mb-3">
                 <label class="form-label">Product Name</label>
@@ -137,6 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
             </div>
 
             <button type="submit" class="btn btn-primary">Update Product</button>
+            <a href="update_product.php" class="btn btn-secondary">Back to Fetch Product</a>
         </form>
     </div>
 </body>

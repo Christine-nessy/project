@@ -1,18 +1,28 @@
-
 <?php
 session_start();
 include '../database.php';
 
+// Check if user is logged in
 $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+if (!$user_id) {
+    header("Location: ../login.php");
+    exit;
+}
+
+// Database connection
 $db_instance = new Database('PDO', 'localhost', '3308', 'root', 'root', 'user_data');
 $db = $db_instance->getConnection();
 
-$stmt = $db->prepare("SELECT product_id,quantity FROM shopping_cart  WHERE user_id = :user_id");
+// Fetch products in the shopping cart with details from the products table
+$stmt = $db->prepare("
+    SELECT sc.product_id, sc.quantity, p.name, p.price, p.image_url 
+    FROM shopping_cart sc
+    JOIN products p ON sc.product_id = p.product_id
+    WHERE sc.user_id = :user_id
+");
 $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
 $stmt->execute();
 $cart_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
-$price=$cart_items['product_id'];
-$sqlt = $db->prepare("SELECT price, FROM shopping_cart  WHERE user_id = :user_id");
 ?>
 
 <!DOCTYPE html>
@@ -41,10 +51,16 @@ $sqlt = $db->prepare("SELECT price, FROM shopping_cart  WHERE user_id = :user_id
                 <tbody>
                     <?php $total_price = 0; ?>
                     <?php foreach ($cart_items as $item): ?>
-                        <?php $subtotal = $item['price'] * $item['quantity']; ?>
-                        <?php $total_price += $subtotal; ?>
+                        <?php 
+                            $subtotal = $item['price'] * $item['quantity'];
+                            $total_price += $subtotal;
+                        ?>
                         <tr>
-                            <td><img src="<?= htmlspecialchars($item['image_url']); ?>" width="50" onerror="this.src='default.jpg';" alt="Product Image"></td>
+                            <td>
+                                <img src="<?= !empty($item['image_url']) ? htmlspecialchars($item['image_url']) : 'default.jpg'; ?>" 
+                                     width="50" onerror="this.src='default.jpg';" 
+                                     alt="Product Image">
+                            </td>
                             <td><?= htmlspecialchars($item['name']); ?></td>
                             <td>$<?= number_format($item['price'], 2); ?></td>
                             <td>
@@ -55,7 +71,11 @@ $sqlt = $db->prepare("SELECT price, FROM shopping_cart  WHERE user_id = :user_id
                                 </form>
                             </td>
                             <td>$<?= number_format($subtotal, 2); ?></td>
-                            <td><a href="remove_from_cart.php?product_id=<?= intval($item['product_id']); ?>" class="btn btn-sm btn-danger">Remove</a></td>
+                            <td>
+                                <a href="remove_from_cart.php?product_id=<?= intval($item['product_id']); ?>" class="btn btn-sm btn-danger">
+                                    Remove
+                                </a>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
