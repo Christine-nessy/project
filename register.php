@@ -63,6 +63,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: register.php");
         exit;
     }
+    // Check if the email is already registered
+    if ($user->emailExists($email)) {
+        echo "This email is already registered. Please use a different email.";
+        header("Location: register.php");
+        exit;
+    }
+
 
     // Hash password
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
@@ -188,6 +195,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <button type="submit" class="btn btn-primary w-100">Register</button>
         </form>
+        <a href="login_form.php">Do you have an Account?Login</a>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
