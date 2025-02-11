@@ -1,35 +1,42 @@
 <?php
 session_start();
-include '../database.php'; // Include database connection
+include '../database.php';
 
-// Ensure user is logged in
-$user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
-if (!$user_id) {
-    header("Location: ../login.php?error=Please log in to view your order");
+// Get order ID
+$order_id = isset($_GET['order_id']) ? intval($_GET['order_id']) : null;
+if (!$order_id) {
+    header("Location: checkout.php?error=Invalid order ID.");
     exit;
 }
 
-// Connect to database
+// Database connection
 $db_instance = new Database('PDO', 'localhost', '3308', 'root', 'root', 'user_data');
 $db = $db_instance->getConnection();
 
-// Fetch latest order for the user
-$stmt = $db->prepare("SELECT * FROM orders WHERE user_id = :user_id ORDER BY order_id DESC LIMIT 1");
-$stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+// Fetch order details
+$stmt = $db->prepare("
+    SELECT o.order_id, o.total_amount, o.payment_method, o.order_date, o.status, u.username
+    FROM orders o
+    JOIN users u ON o.user_id = u.user_id
+    WHERE o.order_id = :order_id
+");
+$stmt->bindParam(':order_id', $order_id, PDO::PARAM_INT);
 $stmt->execute();
 $order = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$order) {
-    header("Location: ../products.php?error=No recent orders found");
+    header("Location: checkout.php?error=Order not found.");
     exit;
 }
 
-// Fetch order items
-$stmt = $db->prepare("SELECT oi.product_id, p.name, p.image_url, oi.quantity, oi.price, (oi.quantity * oi.price) AS total_price
-                      FROM order_items oi
-                      JOIN products p ON oi.product_id = p.product_id
-                      WHERE oi.order_id = :order_id");
-$stmt->bindParam(':order_id', $order['order_id'], PDO::PARAM_INT);
+// Fetch ordered items
+$stmt = $db->prepare("
+    SELECT oi.product_id, oi.quantity, oi.price, p.name, p.image_url 
+    FROM order_items oi
+    JOIN products p ON oi.product_id = p.product_id
+    WHERE oi.order_id = :order_id
+");
+$stmt->bindParam(':order_id', $order_id, PDO::PARAM_INT);
 $stmt->execute();
 $order_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -40,37 +47,40 @@ $order_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Confirmation</title>
-    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h2>Order Confirmation</h2>
-    <p>Thank you for your purchase! Your order has been successfully placed.</p>
-    
-    <h3>Order Details</h3>
-    <p><strong>Order ID:</strong> <?= $order['order_id'] ?></p>
-    <p><strong>Order Date:</strong> <?= $order['order_date'] ?></p>
-    <p><strong>Total Amount:</strong> KES <?= number_format($order['total_amount'], 2) ?></p>
+    <div class="container mt-5">
+        <h1>Order Confirmation</h1>
+        <h3>Order ID: <?= $order['order_id']; ?></h3>
+        <h4>Customer: <?= htmlspecialchars($order['username']); ?></h4>
+        <h4>Total Amount: $<?= number_format($order['total_amount'], 2); ?></h4>
+        <h4>Payment Method: <?= ucfirst($order['payment_method']); ?></h4>
+        <h4>Order Status: <?= $order['status']; ?></h4>
 
-    <h3>Items Purchased</h3>
-    <table>
-        <tr>
-            <th>Image</th>
-            <th>Product</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Total</th>
-        </tr>
-        <?php foreach ($order_items as $item) : ?>
-            <tr>
-                <td><img src="<?= $item['image_url'] ?>" width="50" height="50"></td>
-                <td><?= htmlspecialchars($item['name']) ?></td>
-                <td><?= $item['quantity'] ?></td>
-                <td>KES <?= number_format($item['price'], 2) ?></td>
-                <td>KES <?= number_format($item['total_price'], 2) ?></td>
-            </tr>
-        <?php endforeach; ?>
-    </table>
+        <h3>Ordered Items:</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($order_items as $item): ?>
+                    <tr>
+                        <td><img src="<?= htmlspecialchars($item['image_url']); ?>" width="100" alt="Product"></td>
+                        <td><?= htmlspecialchars($item['name']); ?></td>
+                        <td>$<?= number_format($item['price'], 2); ?></td>
+                        <td><?= intval($item['quantity']); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
 
-    <p><a href="../products.php">Continue Shopping</a></p>
+        <a href="../products.php" class="btn btn-primary">Continue Shopping</a>
+    </div>
 </body>
 </html>
