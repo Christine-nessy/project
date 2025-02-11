@@ -12,24 +12,20 @@ if (!isset($_SESSION['user_id'])) {
 $db_instance = new Database('PDO', 'localhost', '3308', 'root', 'root', 'user_data');
 $db = $db_instance->getConnection();
 
-$order_details = null;
-$error = "";
-
-// Handle form submission
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $order_id = $_POST['order_id'];
-
-    // Fetch order details
-    $stmt = $db->prepare("SELECT * FROM orders WHERE order_id = :order_id AND user_id = :user_id");
-    $stmt->bindParam(':order_id', $order_id, PDO::PARAM_INT);
-    $stmt->bindParam(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
-    $stmt->execute();
-    $order_details = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$order_details) {
-        $error = "Order not found or does not belong to you.";
-    }
-}
+// Fetch all orders for the logged-in user
+$stmt = $db->prepare("
+    SELECT orders.order_id, orders.total_price, orders.status, orders.created_at,
+           GROUP_CONCAT(products.name SEPARATOR ', ') AS names
+    FROM orders
+    LEFT JOIN order_items ON orders.order_id = order_items.order_id
+    LEFT JOIN products ON order_items.product_id = products.id
+    WHERE orders.user_id = :user_id
+    GROUP BY orders.order_id
+    ORDER BY orders.created_at DESC
+");
+$stmt->bindParam(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+$stmt->execute();
+$orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -37,30 +33,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Track Order</title>
+    <title>My Orders</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="container mt-5">
-        <h2>Track Your Order</h2>
-        <form method="POST">
-            <div class="mb-3">
-                <label for="order_id" class="form-label">Enter Order ID:</label>
-                <input type="number" name="order_id" id="order_id" class="form-control" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Track Order</button>
-        </form>
+        <h2>My Orders</h2>
 
-        <?php if ($error): ?>
-            <div class="alert alert-danger mt-3"><?php echo htmlspecialchars($error); ?></div>
-        <?php elseif ($order_details): ?>
-            <div class="alert alert-success mt-3">
-                <h4>Order Details</h4>
-                <p><strong>Order ID:</strong> <?php echo htmlspecialchars($order_details['order_id']); ?></p>
-                <p><strong>Total Price:</strong> $<?php echo number_format($order_details['total_price'], 2); ?></p>
-                <p><strong>Status:</strong> <?php echo htmlspecialchars($order_details['status']); ?></p>
-                <p><strong>Order Date:</strong> <?php echo htmlspecialchars($order_details['created_at']); ?></p>
-            </div>
+        <?php if (empty($orders)): ?>
+            <div class="alert alert-info mt-3">You have no orders yet.</div>
+        <?php else: ?>
+            <table class="table table-striped mt-3">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Products</th>
+                        <th>Total Price</th>
+                        <th>Status</th>
+                        <th>Order Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($orders as $order): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($order['order_id']); ?></td>
+                            <td><?php echo htmlspecialchars($order['product_names'] ?? 'N/A'); ?></td>
+                            <td>$<?php echo number_format($order['total_price'], 2); ?></td>
+                            <td><?php echo htmlspecialchars($order['status']); ?></td>
+                            <td><?php echo htmlspecialchars($order['created_at']); ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
         <?php endif; ?>
     </div>
 </body>

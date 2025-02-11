@@ -40,19 +40,60 @@ $total_orders = $order_data ? $order_data['order_count'] : 0;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
             background: url('images/background.png') no-repeat center center fixed;
             background-size: cover;
             font-family: Arial, sans-serif;
             color: #333;
-            height: 100vh;
             margin: 0;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: 250px;
+            position: fixed;
+            height: 100%;
+            background: linear-gradient(
+                to bottom, 
+                rgba(243, 215, 244, 0.8),
+                rgba(243, 215, 244, 0.8), 
+                rgba(180, 120, 146, 0.7) 
+            );
+            backdrop-filter: blur(10px);
+            padding: 15px;
+            color: black;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar a {
+            color: black;
+            text-decoration: none;
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .sidebar a:hover {
+            background-color: rgba(53, 122, 189, 0.7);
+            transform: scale(1.05);
+        }
+
+        /* Main Content */
+        .content {
+            margin-left: 270px;
+            padding: 40px;
             display: flex;
             justify-content: center;
             align-items: center;
+            height: 100vh;
         }
 
+        /* Dashboard Container */
         .dashboard-container {
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
@@ -101,15 +142,29 @@ $total_orders = $order_data ? $order_data['order_count'] : 0;
 </head>
 <body>
 
-    <div class="dashboard-container">
-        <h2>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</h2>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h4>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</h4>
+        <a href="dashboard.php">Dashboard</a>
+        <a href="about_us.php">About Us</a>
+        <a href="products.php">Products</a>
+        <a href="Cart/cart.php">Catalogue</a>
+        <a href="Settings.php">Settings</a>
+        <a href="logout.php">Logout</a>
+    </div>
 
-        <div class="dashboard-box">
-            <h3>Total Orders</h3>
-            <p><?php echo $total_orders; ?></p>
+    <!-- Main Content -->
+    <div class="content">
+        <div class="dashboard-container">
+            <h2>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</h2>
+
+            <div class="dashboard-box">
+                <h3>Total Orders</h3>
+                <p><?php echo $total_orders; ?></p>
+            </div>
+
+            <a href="track_order.php" class="track-order-btn">Track Your Orders</a>
         </div>
-
-        <a href="track_order.php" class="track-order-btn">Track Your Orders</a>
     </div>
 
 </body>
