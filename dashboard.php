@@ -53,6 +53,46 @@ if (!isset($_SESSION['username'])) {
         margin-left: 250px;
         padding: 20px;
     }
+  /* Center the track order box */
+.track-container {
+    height: 100vh; /* Full page height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Square box styling */
+.track-order-box {
+    width: 200px;
+    height: 200px;
+    background: linear-gradient(135deg, #ffcccb, #ffebcd);
+    border-radius: 10px; /* Slightly rounded edges */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #333;
+    font-size: 18px;
+    font-weight: bold;
+    text-decoration: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.track-order-box:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Track Order Icon */
+.track-icon {
+    margin-left: 30%;
+    width: 200px;
+    height: 200px;
+    margin-bottom: 10px;
+}
+
 
     
     </style>
@@ -71,8 +111,18 @@ if (!isset($_SESSION['username'])) {
         <a href="logout.php">Logout</a>
     </div>
 
+
     <!-- Main Content -->
     <div class="content">
+    <div class="container mt-5 d-flex justify-content-center">
+    <a href="track_order.php" class="track-order-container">
+        <div class="track-order-circle">
+            <img src="images\cardboard-box-with-cargo-checklist-pencil.jpg" alt="Track Order" class="track-icon">
+            <p>Track Order</p>
+        </div>
+    </a>
+</div>
+
 
     </div>
 
