@@ -110,6 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['process_return'])) {
                                     <option value="Shipped" <?php echo ($order['status'] == 'Shipped') ? 'selected' : ''; ?>>Shipped</option>
                                     <option value="Completed" <?php echo ($order['status'] == 'Completed') ? 'selected' : ''; ?>>Completed</option>
                                     <option value="Cancelled" <?php echo ($order['status'] == 'Cancelled') ? 'selected' : ''; ?>>Cancelled</option>
+                                    
                                 </select>
                                 <input type="hidden" name="order_id" value="<?php echo intval($order['order_id']); ?>">
                                 <button type="submit" name="update_status" class="btn btn-primary mt-2">Update Status</button>

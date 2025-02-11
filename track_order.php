@@ -1,6 +1,7 @@
 <?php
-session_start();
+//session_start();
 include 'database.php'; // Include database connection
+include 'general_navbar.php';
 
 // Ensure the user is logged in
 if (!isset($_SESSION['user_id'])) {
@@ -15,14 +16,15 @@ $db = $db_instance->getConnection();
 // Fetch all orders for the logged-in user
 $stmt = $db->prepare("
     SELECT orders.order_id, orders.total_price, orders.status, orders.created_at,
-           GROUP_CONCAT(products.name SEPARATOR ', ') AS names
+           GROUP_CONCAT(products.name SEPARATOR ', ') AS product_names
     FROM orders
     LEFT JOIN order_items ON orders.order_id = order_items.order_id
-    LEFT JOIN products ON order_items.product_id = products.id
+    LEFT JOIN products ON order_items.product_id = products.product_id
     WHERE orders.user_id = :user_id
     GROUP BY orders.order_id
     ORDER BY orders.created_at DESC
 ");
+
 $stmt->bindParam(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
 $stmt->execute();
 $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);

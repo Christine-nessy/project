@@ -1,5 +1,6 @@
 <?php
-session_start();
+include 'general_navbar.php';
+//session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,21 +20,7 @@ session_start();
             margin: 0;
             padding: 0;
         }
-        .navbar {
-            
-            background: linear-gradient(
-        to bottom, 
-        rgba(243, 215, 244, 0.8),
-        rgba(243, 215, 244, 0.8), /* Light mint green at the top */
-        rgba(180, 120, 146, 0.7)   /* Darker green at the bottom */
-    );
-        }
-        .navbar .navbar-brand, .navbar .nav-link {
-            color: black !important;
-        }
-        .navbar .nav-link:hover {
-            color: #ddd !important;
-        }
+    
         .about-us-section {
             padding: 50px 20px;
             background: rgba(255, 255, 255, 0.8);
@@ -64,31 +51,7 @@ session_start();
     </style>
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">HookedByNessy</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="dashboard.php">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="about_us.php">About Us</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="products.php">Products</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="contact.php">Contact</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    
   <!-- About Us Section -->
   <div class="about-us-section">
         <img src="images/nessy.png" alt="Yarn Logo">
