@@ -29,7 +29,6 @@ class Database {
                 $this->connection = new PDO($dsn, $db_user, $db_pass);
                 // Set PDO error mode to exception
                 $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                echo "Connection successful."; // Connection success message
             } catch (PDOException $e) {
                 echo "Connection failed: " . $e->getMessage(); // Handle errors
             }
@@ -43,4 +42,3 @@ class Database {
 }
 // Instantiate the database connection object
 $db = new Database('PDO', 'localhost', '3308', 'root', 'root', 'user_data');
-?>

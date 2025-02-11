@@ -12,8 +12,8 @@ if (!$user_id) {
 // Database connection
 $db_instance = new Database('PDO', 'localhost', '3308', 'root', 'root', 'user_data');
 $db = $db_instance->getConnection();
-
-// Fetch products in the shopping cart with details from the products table
+//width="50" onerror="this.src='default.jpg';" 
+// Fetch products in the shopping cart with details from the products table <?= !empty($item['image_url']) ? htmlspecialchars($item['image_url']) : 'default.jpg'"
 $stmt = $db->prepare("
     SELECT sc.product_id, sc.quantity, p.name, p.price, p.image_url 
     FROM shopping_cart sc
@@ -23,6 +23,8 @@ $stmt = $db->prepare("
 $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
 $stmt->execute();
 $cart_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$image= $_SESSION["image"];
+$imageType = 'image/jpeg';
 ?>
 
 <!DOCTYPE html>
@@ -56,9 +58,10 @@ $cart_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             $total_price += $subtotal;
                         ?>
                         <tr>
+                        
                             <td>
-                                <img src="<?= !empty($item['image_url']) ? htmlspecialchars($item['image_url']) : 'default.jpg'; ?>" 
-                                     width="50" onerror="this.src='default.jpg';" 
+                                <img src="data:<?php echo $imageType; ?>;base64,<?php echo $item['image_url']; ?>" 
+                                     width="130"
                                      alt="Product Image">
                             </td>
                             <td><?= htmlspecialchars($item['name']); ?></td>
@@ -82,6 +85,7 @@ $cart_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </table>
             <h3>Total: $<?= number_format($total_price, 2); ?></h3>
             <a href="checkout.php" class="btn btn-primary">Proceed to Checkout</a>
+            <a href="../products.php" class="btn btn-primary">Add More Products</a>
         <?php else: ?>
             <p>Your cart is empty.</p>
         <?php endif; ?>
