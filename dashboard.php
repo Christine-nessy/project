@@ -99,13 +99,13 @@ $total_orders = $order_data ? $order_data['order_count'] : 0;
             backdrop-filter: blur(10px);
             padding: 30px;
             border-radius: 15px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            box-shadow: 0px 4px 10px rgba(241, 36, 203, 0.3);
             text-align: center;
             width: 350px;
         }
 
         .dashboard-box {
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(157, 39, 104, 0.85);
             color: white;
             padding: 20px;
             border-radius: 10px;
@@ -125,7 +125,7 @@ $total_orders = $order_data ? $order_data['order_count'] : 0;
 
         .track-order-btn {
             display: block;
-            background: #ff6600;
+            background:rgb(123, 222, 2);
             color: white;
             text-decoration: none;
             padding: 12px;
@@ -136,7 +136,7 @@ $total_orders = $order_data ? $order_data['order_count'] : 0;
         }
 
         .track-order-btn:hover {
-            background: #cc5500;
+            background:rgb(0, 204, 14);
         }
     </style>
 </head>
@@ -156,7 +156,7 @@ $total_orders = $order_data ? $order_data['order_count'] : 0;
     <!-- Main Content -->
     <div class="content">
         <div class="dashboard-container">
-            <h2>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</h2>
+           
 
             <div class="dashboard-box">
                 <h3>Total Orders</h3>
