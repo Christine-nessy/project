@@ -16,10 +16,14 @@ if (isset($_SESSION['username'])) {
     <title>Login</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <style>
-     body {
-    background: url('images/HookedByNessy.png') no-repeat center center fixed;
-    background-size: cover; /* Ensures the image covers the entire page */
-    background-position: center center; /* Ensures the image is centered */
+        /* Gradient Background */
+        body {
+    background: 
+        url('images/rb_45678.png') no-repeat center center fixed, 
+        linear-gradient(135deg, #FFB200, #EB5B00, #D91656, #640D5F);
+    background-size: cover, cover; /* Ensures both image and gradient cover the screen */
+    background-position: center center;
+    background-attachment: fixed;
     font-family: 'Arial', sans-serif;
     height: 100vh;
     margin: 0;
@@ -29,9 +33,13 @@ if (isset($_SESSION['username'])) {
     color: #fff;
 }
 
+   
+
+
+        /* Glassmorphic Form */
         .glass-effect {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            background: rgba(145, 33, 33, 0.1);
+            backdrop-filter: blur(6px);
             border-radius: 15px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
             padding: 40px;
@@ -44,14 +52,23 @@ if (isset($_SESSION['username'])) {
             transform: scale(1.05);
         }
 
+        h2 {
+            color: #fff;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        /* Input Fields */
         .form-label {
-            color: black;
+            color: #fff;
             font-weight: bold;
         }
 
         .form-control {
-            background-color: rgba(227, 221, 221, 0.299);
-            color: black;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #fff;
             border: 1px solid rgba(255, 255, 255, 0.5);
             margin-bottom: 15px;
             padding: 12px;
@@ -59,41 +76,36 @@ if (isset($_SESSION['username'])) {
 
         .form-control:focus {
             background-color: rgba(255, 255, 255, 0.4);
-            border-color: #007bff;
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            border-color: #FFB200;
+            box-shadow: 0 0 5px rgba(255, 178, 0, 0.5);
         }
 
-        .forgot-password a {
-            color: black;
-            text-decoration: none;
-            font-size: 14px;
-        }
-
-        .forgot-password a:hover {
-            color: #007bff;
-        }
-
-        .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
+        /* Buttons */
+        .btn-custom {
+            background-color: #D91656;
+            border: none;
             padding: 12px 20px;
             font-size: 16px;
             font-weight: bold;
             width: 100%;
             transition: background-color 0.3s ease, transform 0.3s ease;
+            color: #fff;
         }
 
-        .btn-primary:hover {
-            background-color: #0056b3;
+        .btn-custom:hover {
+            background-color: #EB5B00;
             transform: translateY(-2px);
         }
 
-        h2 {
-            color: black;
-            text-align: center;
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 20px;
+        /* Links */
+        .forgot-password a {
+            color: #FFB200;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .forgot-password a:hover {
+            color: #EB5B00;
         }
 
         @media (max-width: 576px) {
@@ -120,11 +132,11 @@ if (isset($_SESSION['username'])) {
                 <label for="password" class="form-label">Password</label>
                 <input type="password" class="form-control" id="password" name="password" required>
             </div>
-            <button type="submit" class="btn btn-primary">Login</button>
+            <button type="submit" class="btn btn-custom">Login</button>
         </form>
         <div class="forgot-password mt-3">
-            <a href="forgot_password.php">Forgot your password?</a>
-            <a href="register.php">Don't have an Account?Register</a>
+            <a href="forgot_password.php">Forgot your password?</a> |
+            <a href="register.php">Don't have an account? Register</a>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

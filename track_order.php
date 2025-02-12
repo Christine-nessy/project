@@ -37,6 +37,21 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Orders</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+         body {
+    height: 100vh;
+    width: 100vw;
+    background: 
+        url('images/rb_45678.png') no-repeat center center fixed;
+    background-size: cover; /* Ensures both the image and gradient fit the entire viewport */
+    background-blend-mode: overlay; /* Blends the image with the gradient */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    justify-content: center;
+
+}
+    </style>
 </head>
 <body>
     <div class="container mt-5">

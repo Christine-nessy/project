@@ -15,6 +15,7 @@ session_start();
     <style>
         /* Navbar background with gradient */
         .navbar {
+            position: fixed;
             background: linear-gradient(
                 to right, 
                 #FFB200,  /* Yellow */
@@ -22,6 +23,7 @@ session_start();
                 #D91656,  /* Pink */
                 #640D5F   /* Dark Purple */
             );
+            position: fixed;
         }
 
         /* Navbar text styles */
