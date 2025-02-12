@@ -5,7 +5,7 @@ include '../database.php'; // Include database connection
 // Ensure user is logged in
 $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 if (!$user_id) {
-    header("Location: ../login.php?error=Please log in to add items to the cart");
+    header("Location: ../login_form.php?error=Please log in to add items to the cart");
     exit;
 }
 

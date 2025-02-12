@@ -23,7 +23,7 @@ session_start();
                 #D91656,  /* Pink */
                 #640D5F   /* Dark Purple */
             );
-            position: fixed;
+            height: 60px;
         }
 
         /* Navbar text styles */
@@ -51,6 +51,10 @@ session_start();
         .navbar-toggler-icon {
             filter: invert(1);
         }
+        .container{
+            height: 60px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -64,6 +68,9 @@ session_start();
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="homepage.php">Home</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="dashboard.php">Dashboard</a>
                     </li>

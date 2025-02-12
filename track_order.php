@@ -43,11 +43,13 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
     width: 100vw;
     background: 
         url('images/rb_45678.png') no-repeat center center fixed;
+        
     background-size: cover; /* Ensures both the image and gradient fit the entire viewport */
     background-blend-mode: overlay; /* Blends the image with the gradient */
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+
     justify-content: center;
 
 }

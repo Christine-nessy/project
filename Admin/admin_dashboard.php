@@ -51,6 +51,7 @@ include 'admin_auth.php'; // Ensure admin is logged in
     <a href="delete_product.php">Delete Product</a>
     <a href="view_products.php">View Product</a>
     <a href="admin_orders.php">View Orders</a>
+    <a href="view_users.php">View Users</a>
     <a href="admin_logout.php">Logout</a>
 </body>
 </html>

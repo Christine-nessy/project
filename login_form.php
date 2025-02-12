@@ -99,13 +99,13 @@ if (isset($_SESSION['username'])) {
 
         /* Links */
         .forgot-password a {
-            color: #FFB200;
+            color:rgb(122, 87, 3);
             text-decoration: none;
             font-size: 14px;
         }
 
         .forgot-password a:hover {
-            color: #EB5B00;
+            color:rgb(85, 34, 3);
         }
 
         @media (max-width: 576px) {
