@@ -33,7 +33,6 @@ $stmt->execute();
 $order_data = $stmt->fetch(PDO::FETCH_ASSOC);
 $total_orders = $order_data ? $order_data['order_count'] : 0;
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -57,19 +56,19 @@ $total_orders = $order_data ? $order_data['order_count'] : 0;
             height: 100%;
             background: linear-gradient(
                 to bottom, 
-                rgba(243, 215, 244, 0.8),
-                rgba(243, 215, 244, 0.8), 
-                rgba(180, 120, 146, 0.7) 
+                rgba(255, 178, 0, 0.8),
+                rgba(235, 91, 0, 0.8), 
+                rgba(100, 13, 95, 0.7) 
             );
             backdrop-filter: blur(10px);
             padding: 15px;
-            color: black;
+            color: white;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
             border-right: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .sidebar a {
-            color: black;
+            color: white;
             text-decoration: none;
             display: block;
             margin: 10px 0;
@@ -79,7 +78,7 @@ $total_orders = $order_data ? $order_data['order_count'] : 0;
         }
 
         .sidebar a:hover {
-            background-color: rgba(53, 122, 189, 0.7);
+            background-color: rgba(217, 22, 86, 0.7);
             transform: scale(1.05);
         }
 
@@ -99,13 +98,13 @@ $total_orders = $order_data ? $order_data['order_count'] : 0;
             backdrop-filter: blur(10px);
             padding: 30px;
             border-radius: 15px;
-            box-shadow: 0px 4px 10px rgba(241, 36, 203, 0.3);
+            box-shadow: 0px 4px 10px rgba(100, 13, 95, 0.3);
             text-align: center;
             width: 350px;
         }
 
         .dashboard-box {
-            background: rgba(157, 39, 104, 0.85);
+            background: rgba(217, 22, 86, 0.85);
             color: white;
             padding: 20px;
             border-radius: 10px;
@@ -125,7 +124,7 @@ $total_orders = $order_data ? $order_data['order_count'] : 0;
 
         .track-order-btn {
             display: block;
-            background:rgb(123, 222, 2);
+            background: #FFB200;
             color: white;
             text-decoration: none;
             padding: 12px;
@@ -136,7 +135,7 @@ $total_orders = $order_data ? $order_data['order_count'] : 0;
         }
 
         .track-order-btn:hover {
-            background:rgb(0, 204, 14);
+            background: #EB5B00;
         }
     </style>
 </head>
@@ -156,7 +155,7 @@ $total_orders = $order_data ? $order_data['order_count'] : 0;
     <!-- Main Content -->
     <div class="content">
         <div class="dashboard-container">
-           
+            
 
             <div class="dashboard-box">
                 <h3>Total Orders</h3>
@@ -169,3 +168,4 @@ $total_orders = $order_data ? $order_data['order_count'] : 0;
 
 </body>
 </html>
+

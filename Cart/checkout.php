@@ -78,7 +78,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -86,12 +85,77 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Page Background */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FFB200; /* Warm yellow background */
+            color: #640D5F; /* Dark purple for contrast */
+        }
+
+        /* Container Styling */
+        .container {
+            max-width: 600px;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            margin-top: 50px;
+        }
+
+        /* Headings */
+        h1, h3 {
+            color: #D91656;
+            font-weight: bold;
+        }
+
+        /* Labels */
+        .form-label {
+            font-weight: bold;
+            color: #EB5B00;
+        }
+
+        /* Input Fields */
+        .form-control {
+            border: 2px solid #D91656;
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .form-control:focus {
+            border-color: #EB5B00;
+            box-shadow: 0 0 5px rgba(233, 91, 0, 0.5);
+        }
+
+        /* Buttons */
+        .btn-success {
+            background-color: #D91656;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+        }
+
+        .btn-success:hover {
+            background-color: #EB5B00;
+        }
+
+        .btn-secondary {
+            background-color: #640D5F;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+        }
+
+        .btn-secondary:hover {
+            background-color: #D91656;
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1>Checkout</h1>
+    <div class="container">
+        <h1 class="text-center">Checkout</h1>
         
-        <h3>Total Amount: $<?= number_format($total_price, 2); ?></h3>
+        <h3 class="text-center">Total Amount: $<?= number_format($total_price, 2); ?></h3>
 
         <form action="checkout.php" method="POST">
             <div class="mb-3">
@@ -113,8 +177,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </select>
             </div>
 
-            <button type="submit" class="btn btn-success">Confirm Order</button>
-            <a href="cart.php" class="btn btn-secondary">Back to Cart</a>
+            <div class="d-flex justify-content-between">
+                <a href="cart.php" class="btn btn-secondary">Back to Cart</a>
+                <button type="submit" class="btn btn-success">Confirm Order</button>
+            </div>
         </form>
     </div>
 </body>

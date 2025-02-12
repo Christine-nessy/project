@@ -30,43 +30,89 @@ $imageType = 'image/jpeg'; // Assuming the image is a JPEG (adjust as needed)
     <title>Products - HookedByNessy</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        /* Solid background color */
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(to bottom, #f8f9fa, #e0e7f5); 
-            color: #333;
+            background-color:rgb(103, 28, 99); /* Dark Purple */
+            color: #FFF; /* White text for readability */
         }
-        
+
+        /* Product card styling */
         .product-card {
-            border: 1px solid #ddd;
+            border: 2px solid #EB5B00;
             border-radius: 10px;
             padding: 15px;
             text-align: center;
             background: white;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
+
+        /* Hover effect */
         .product-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
         }
+
+        /* Product image */
         .product-card img {
             max-width: 100%;
             height: auto;
             border-radius: 10px;
             margin-bottom: 15px;
         }
+
+        /* Product name */
         .product-card h5 {
-            color: #4a90e2;
+            color: #D91656;
+            font-weight: bold;
+        }
+
+        /* Price styling */
+        .product-card p {
+            color: #640D5F;
+            font-weight: bold;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background-color: #D91656;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #EB5B00;
+        }
+
+        /* Search bar */
+        .form-control {
+            border: 2px solid #EB5B00;
+        }
+
+        .btn-search {
+            background-color: #FFB200;
+            border: none;
+            color: black;
+        }
+
+        .btn-search:hover {
+            background-color: #EB5B00;
+            color: white;
+        }
+
+        /* Page Title */
+        h1 {
+            color: #FFF;
         }
     </style>
 </head>
 <body>
-    
 
     <!-- Search Bar Section -->
     <div class="container mt-5">
         <form action="products.php" method="GET" class="d-flex justify-content-center mb-4">
             <input type="text" name="search" class="form-control w-50" placeholder="Search products..." value="<?php echo htmlspecialchars($searchTerm); ?>">
-            <button type="submit" class="btn btn-primary ms-2">Search</button>
+            <button type="submit" class="btn btn-search ms-2">Search</button>
         </form>
 
         <h1 class="text-center mb-4">Our Products</h1>

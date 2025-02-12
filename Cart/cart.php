@@ -36,19 +36,40 @@ $imageType = 'image/jpeg';
     <title>Shopping Cart</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .navbar {
+           .navbar {
             background: linear-gradient(
-                to bottom, 
-                rgba(243, 215, 244, 0.8),
-                rgba(243, 215, 244, 0.8), /* Light purple shade */
-                rgba(180, 120, 146, 0.7)   /* Darker purple at the bottom */
+                to right, 
+                #FFB200,  /* Yellow */
+                #EB5B00,  /* Orange */
+                #D91656,  /* Pink */
+                #640D5F   /* Dark Purple */
             );
         }
-        .navbar .navbar-brand, .navbar .nav-link {
-            color: black !important;
+
+        /* Navbar text styles */
+        .navbar .navbar-brand {
+            color: #FFF !important;
+            font-weight: bold;
         }
+
+        .navbar .nav-link {
+            color: #FFF !important;
+            font-weight: 500;
+            transition: color 0.3s ease-in-out;
+        }
+
+        /* Hover effect */
         .navbar .nav-link:hover {
-            color: #ddd !important;
+            color: #FFB200 !important; /* Yellow on hover */
+        }
+
+        /* Navbar toggler */
+        .navbar-toggler {
+            border: none;
+        }
+
+        .navbar-toggler-icon {
+            filter: invert(1);
         }
     </style>
 </head>

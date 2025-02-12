@@ -38,9 +38,65 @@ $order_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Confirmation</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Page Background */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FFB200; /* Warm yellow background */
+            color: #640D5F; /* Dark purple for contrast */
+        }
+
+        /* Container Styling */
+        .container {
+            max-width: 700px;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            margin-top: 50px;
+        }
+
+        /* Headings */
+        h1, h3 {
+            color: #D91656;
+            font-weight: bold;
+        }
+
+        /* Text Styling */
+        p {
+            font-size: 1.1rem;
+            color: #640D5F;
+        }
+
+        /* Table Styling */
+        .table {
+            border: 2px solid #EB5B00;
+        }
+
+        .table thead {
+            background-color: #EB5B00;
+            color: white;
+        }
+
+        .table tbody tr:hover {
+            background-color: #FFF3E0;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background-color: #D91656;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+        }
+
+        .btn-primary:hover {
+            background-color: #EB5B00;
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
+    <div class="container text-center">
         <h1>Order Confirmation</h1>
         <?php if ($order): ?>
             <p>Thank you for your purchase! Your order has been placed successfully.</p>
@@ -49,7 +105,7 @@ $order_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <p><strong>Total Price:</strong> $<?= number_format($order['total_price'], 2); ?></p>
 
             <h3>Items Ordered:</h3>
-            <table class="table">
+            <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th>Product</th>
