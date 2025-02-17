@@ -17,22 +17,26 @@ include 'admin_auth.php'; // Ensure admin is logged in
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: rgb(235, 230, 236);
+            background-color: #DAD2FF; /* #DAD2FF */
+            color: #493D9E; /* #493D9E */
         }
 
         /* Style the main content box */
         .content-box {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            background: #B2A5FF; /* #B2A5FF */
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
             text-align: center;
-            width: 500px;
-            margin-bottom: 30px;
+            width: 550px;
+            margin-bottom: 40px;
+            color: #493D9E; /* #493D9E */
+            font-size: 24px;
+            font-weight: bold;
         }
 
         h1 {
-            font-size: 28px;
+            font-size: 32px;
             margin-bottom: 20px;
         }
 
@@ -40,39 +44,42 @@ include 'admin_auth.php'; // Ensure admin is logged in
         .link-container {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
+            gap: 25px;
             max-width: 900px;
         }
 
         /* Style individual link boxes */
         .link-box {
-            background: #f9f9f9;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            background: #493D9E; /* #493D9E */
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             text-align: center;
-            width: 220px;
+            width: 280px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #FFF2AF; /* #FFF2AF */
         }
 
         .link-box:hover {
             transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            background: #B2A5FF; /* #B2A5FF */
+            color: #493D9E; /* #493D9E */
         }
 
         .link-box a {
             text-decoration: none;
-            color: #4CAF50;
-            font-size: 20px;
+            color: inherit;
             display: block;
             padding: 15px;
             border-radius: 5px;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: color 0.3s ease;
         }
 
         .link-box a:hover {
-            background-color: #4CAF50;
-            color: white;
+            color: #DAD2FF; /* #DAD2FF */
         }
     </style>
 </head>
