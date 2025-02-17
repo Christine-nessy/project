@@ -1,44 +1,70 @@
 <?php
 // Include necessary files
+session_start();
 include 'admin_auth.php'; // Ensure admin is logged in
 include '../database.php'; // Include database connection
 include 'admin_nav.php'; // Admin navigation
 
-// Database connection
+// Create database instance
 $db_instance = new Database('PDO', 'localhost', '3308', 'root', 'root', 'user_data');
 $db = $db_instance->getConnection();
 
-// Fetch total sales per month
-$sales_query = $db->prepare("
-    SELECT DATE_FORMAT(created_at, '%Y-%m') AS month, SUM(total_price) AS total_sales
-    FROM orders 
-    GROUP BY month 
-    ORDER BY month ASC
+// 🔹 Fetch Top-Selling Products
+$stmt = $db->prepare("
+    SELECT products.name, COUNT(order_items.product_id) AS sales_count 
+    FROM order_items 
+    JOIN products ON order_items.product_id = products.product_id 
+    GROUP BY order_items.product_id 
+    ORDER BY sales_count DESC 
+    LIMIT 5
 ");
-$sales_query->execute();
-$sales_data = $sales_query->fetchAll(PDO::FETCH_ASSOC);
+$stmt->execute();
+$top_products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Prepare data for Chart.js
-$months = [];
-$total_sales = [];
-foreach ($sales_data as $row) {
-    $months[] = $row['month'];
-    $total_sales[] = $row['total_sales'];
-}
+$product_names = json_encode(array_column($top_products, 'name'));
+$product_sales = json_encode(array_column($top_products, 'sales_count'));
 
-// Fetch total orders by status
-$status_query = $db->prepare("
-    SELECT status, COUNT(*) AS count FROM orders GROUP BY status
+// 🔹 Fetch User Activity Trends
+$stmt = $db->prepare("
+    SELECT DATE(created_at) AS order_date, COUNT(order_id) AS order_count 
+    FROM orders 
+    GROUP BY order_date 
+    ORDER BY order_date
 ");
-$status_query->execute();
-$status_data = $status_query->fetchAll(PDO::FETCH_ASSOC);
+$stmt->execute();
+$order_trends = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$statuses = [];
-$order_counts = [];
-foreach ($status_data as $row) {
-    $statuses[] = $row['status'];
-    $order_counts[] = $row['count'];
-}
+$order_dates = json_encode(array_column($order_trends, 'order_date'));
+$order_counts = json_encode(array_column($order_trends, 'order_count'));
+
+// 🔹 Fetch Payment Statistics
+$stmt = $db->prepare("
+    SELECT payment_method, COUNT(order_id) AS count 
+    FROM orders 
+    GROUP BY payment_method
+");
+$stmt->execute();
+$payments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$payment_methods = json_encode(array_column($payments, 'payment_method'));
+$payment_counts = json_encode(array_column($payments, 'count'));
+
+// 🔹 Fetch Most Active Users
+$stmt = $db->prepare("
+    SELECT users.username, COUNT(orders.order_id) AS total_orders 
+    FROM orders 
+    JOIN users ON orders.user_id = users.id 
+    GROUP BY users.id 
+    ORDER BY total_orders DESC 
+    LIMIT 5
+");
+$stmt->execute();
+$active_users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$usernames = json_encode(array_column($active_users, 'username'));
+$user_orders = json_encode(array_column($active_users, 'total_orders'));
+
 ?>
 
 <!DOCTYPE html>
@@ -46,69 +72,85 @@ foreach ($status_data as $row) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analytics Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Include Chart.js -->
+    <title>Analytics</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container mt-5">
-        <h1>Analytics Dashboard</h1>
+        <h1 class="mb-4">Business Analytics</h1>
 
-        <!-- Sales Trend Chart -->
-        <div class="card mt-4">
-            <div class="card-header">Monthly Sales Trend</div>
-            <div class="card-body">
-                <canvas id="salesChart"></canvas>
-            </div>
-        </div>
+        <!-- 🔹 Top-Selling Products -->
+        <h3>Top-Selling Products</h3>
+        <canvas id="topProductsChart"></canvas>
 
-        <!-- Order Status Chart -->
-        <div class="card mt-4">
-            <div class="card-header">Orders by Status</div>
-            <div class="card-body">
-                <canvas id="orderStatusChart"></canvas>
-            </div>
-        </div>
+        <!-- 🔹 User Activity Trends -->
+        <h3 class="mt-5">User Activity Trends</h3>
+        <canvas id="orderTrendsChart"></canvas>
+
+        <!-- 🔹 Payment Statistics -->
+        <h3 class="mt-5">Payment Statistics</h3>
+        <canvas id="paymentChart"></canvas>
+
+        <!-- 🔹 Most Active Users -->
+        <h3 class="mt-5">Most Active Users</h3>
+        <canvas id="activeUsersChart"></canvas>
     </div>
 
     <script>
-        // Sales Trend Chart
-        var ctx1 = document.getElementById('salesChart').getContext('2d');
-        new Chart(ctx1, {
-            type: 'line',
+        // 🔹 Top-Selling Products
+        new Chart(document.getElementById("topProductsChart"), {
+            type: 'bar',
             data: {
-                labels: <?php echo json_encode($months); ?>,
+                labels: <?php echo $product_names; ?>,
                 datasets: [{
-                    label: 'Total Sales ($)',
-                    data: <?php echo json_encode($total_sales); ?>,
-                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    label: "Sales Count",
+                    data: <?php echo $product_sales; ?>,
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
                     borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 2
+                    borderWidth: 1
                 }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: { beginAtZero: true }
-                }
             }
         });
 
-        // Orders by Status Chart
-        var ctx2 = document.getElementById('orderStatusChart').getContext('2d');
-        new Chart(ctx2, {
-            type: 'doughnut',
+        // 🔹 User Activity Trends
+        new Chart(document.getElementById("orderTrendsChart"), {
+            type: 'line',
             data: {
-                labels: <?php echo json_encode($statuses); ?>,
+                labels: <?php echo $order_dates; ?>,
                 datasets: [{
-                    label: 'Order Count',
-                    data: <?php echo json_encode($order_counts); ?>,
-                    backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545'],
+                    label: "Orders per Day",
+                    data: <?php echo $order_counts; ?>,
+                    backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 2
+                }]
+            }
+        });
+
+        // 🔹 Payment Statistics
+        new Chart(document.getElementById("paymentChart"), {
+            type: 'pie',
+            data: {
+                labels: <?php echo $payment_methods; ?>,
+                datasets: [{
+                    data: <?php echo $payment_counts; ?>,
+                    backgroundColor: ['#4CAF50', '#FF9800', '#2196F3', '#9C27B0']
+                }]
+            }
+        });
+
+        // 🔹 Most Active Users
+        new Chart(document.getElementById("activeUsersChart"), {
+            type: 'horizontalBar',
+            data: {
+                labels: <?php echo $usernames; ?>,
+                datasets: [{
+                    label: "Total Orders",
+                    data: <?php echo $user_orders; ?>,
+                    backgroundColor: 'rgba(255, 206, 86, 0.6)',
+                    borderColor: 'rgba(255, 206, 86, 1)',
                     borderWidth: 1
                 }]
-            },
-            options: {
-                responsive: true
             }
         });
     </script>
