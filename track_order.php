@@ -41,9 +41,7 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
          body {
     height: 100vh;
     width: 100vw;
-    background: 
-        url('images/rb_45678.png') no-repeat center center fixed;
-        
+    background:   url('images/rb_45678.png') no-repeat center center fixed;  
     background-size: cover; /* Ensures both the image and gradient fit the entire viewport */
     background-blend-mode: overlay; /* Blends the image with the gradient */
     font-family: Arial, sans-serif;
@@ -51,8 +49,46 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
     padding: 0;
 
     justify-content: center;
-
 }
+.table.table-striped.mt-3 {
+    width: 100%;
+    border-collapse: collapse;
+    backdrop-filter: blur(10px); /* Apply blur effect */
+    background: rgba(255, 255, 255, 0.2); /* Transparent white */
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Striped Rows */
+.table.table-striped.mt-3 tbody tr:nth-child(odd) {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.table.table-striped.mt-3 tbody tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Table Header */
+.table.table-striped.mt-3 thead {
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+}
+
+/* Table Borders */
+.table.table-striped.mt-3 th, 
+.table.table-striped.mt-3 td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/* Hover Effect */
+.table.table-striped.mt-3 tbody tr:hover {
+    background: rgba(255, 255, 255, 0.5);
+    transition: background 0.3s ease-in-out;
+}
+
     </style>
 </head>
 <body>

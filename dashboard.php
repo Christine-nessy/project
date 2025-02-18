@@ -148,7 +148,7 @@ $total_orders = $order_data ? $order_data['order_count'] : 0;
         <a href="about_us.php">About Us</a>
         <a href="products.php">Products</a>
         <a href="Cart/cart.php">Catalogue</a>
-        <a href="Settings.php">Settings</a>
+        <a href="user_setting.php">Settings</a>
         <a href="logout.php">Logout</a>
     </div>
 
