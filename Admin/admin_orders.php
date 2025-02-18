@@ -69,6 +69,60 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['process_return'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Management</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #DAD2FF; /* Light purple background */
+            color: #493D9E; /* Dark blue text */
+        }
+        h1 {
+            color: #493D9E; /* Dark blue for heading */
+        }
+        .alert-danger {
+            background-color: #FFF2AF; /* Light yellow for error alert */
+            color: #493D9E; /* Dark blue text for error alert */
+        }
+        .alert-success {
+            background-color: #B2A5FF; /* Light purple for success alert */
+            color: #493D9E; /* Dark blue text for success alert */
+        }
+        .table {
+            border-color: #B2A5FF; /* Light purple borders */
+        }
+        .table-dark {
+            background-color: #B2A5FF; /* Light purple table header */
+            color: #493D9E; /* Dark blue text for table header */
+        }
+         .table-dark th{
+            color: #FFF2AF;
+         }
+        .table-bordered th, .table-bordered td {
+            border-color: #DAD2FF; /* Light purple for table cells */
+        }
+        .btn-primary {
+            background-color: #493D9E; /* Dark blue button */
+            border-color: #493D9E; /* Dark blue button border */
+        }
+        .btn-primary:hover {
+            background-color: #B2A5FF; /* Light purple button on hover */
+            border-color: #B2A5FF; /* Light purple button border on hover */
+        }
+        .btn-warning {
+            background-color: #FFF2AF; /* Light yellow for warning button */
+            border-color: #FFF2AF; /* Light yellow button border */
+        }
+        .btn-warning:hover {
+            background-color: #B2A5FF; /* Light purple for button on hover */
+            border-color: #B2A5FF; /* Light purple button border on hover */
+        }
+        .btn-info {
+            background-color: #B2A5FF; /* Light purple for info button */
+            border-color: #B2A5FF; /* Light purple border for info button */
+        }
+        .btn-info:hover {
+            background-color: #493D9E; /* Dark blue for button on hover */
+            border-color: #493D9E; /* Dark blue button border on hover */
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
@@ -110,7 +164,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['process_return'])) {
                                     <option value="Shipped" <?php echo ($order['status'] == 'Shipped') ? 'selected' : ''; ?>>Shipped</option>
                                     <option value="Completed" <?php echo ($order['status'] == 'Completed') ? 'selected' : ''; ?>>Completed</option>
                                     <option value="Cancelled" <?php echo ($order['status'] == 'Cancelled') ? 'selected' : ''; ?>>Cancelled</option>
-                                    
                                 </select>
                                 <input type="hidden" name="order_id" value="<?php echo intval($order['order_id']); ?>">
                                 <button type="submit" name="update_status" class="btn btn-primary mt-2">Update Status</button>

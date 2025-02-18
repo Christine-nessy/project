@@ -19,6 +19,33 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Products</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #DAD2FF; /* Light background */
+            color: #493D9E; /* Dark blue text */
+        }
+        h1 {
+            color: #493D9E; /* Dark blue for heading */
+        }
+        .table {
+            border-color: #B2A5FF; /* Light purple borders */
+        }
+        .table-dark {
+            background-color: #B2A5FF; /* Light purple table header */
+            color: #493D9E; /* Dark blue text for header */
+        }
+        .table-dark th{
+            color: #FFF2AF;
+
+        }
+        .table-bordered th, .table-bordered td {
+            border-color: #DAD2FF; /* Light purple border for table cells */
+        }
+        .alert-warning {
+            background-color: #FFF2AF; /* Light yellow alert background */
+            color: #493D9E; /* Dark blue text for alert */
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">

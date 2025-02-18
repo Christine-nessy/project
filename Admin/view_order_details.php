@@ -53,6 +53,61 @@ if (!$order) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Details</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #DAD2FF; /* Light lavender background */
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            background-color: white; /* White background for the main content */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            padding: 20px;
+        }
+
+        h1 {
+            color: #493D9E; /* Dark purple for the main heading */
+        }
+
+        h4 {
+            color: #493D9E; /* Dark purple for section headings */
+            margin-top: 20px;
+        }
+
+        .table {
+            background-color: #FFF2AF; /* Light yellow background for the tables */
+        }
+
+        th, td {
+            color: #493D9E; /* Dark purple for table headings and content */
+            text-align: center;
+        }
+
+        .thead-dark th {
+            background-color: #B2A5FF; /* Light purple background for table headers */
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: #B2A5FF; /* Light purple for button */
+            color: white;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background-color: #493D9E; /* Dark purple on hover */
+            color: #FFF2AF; /* Light yellow text on hover */
+        }
+
+        /* Responsive styling */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">

@@ -93,6 +93,53 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete_user'])) {
             return confirm("Are you sure you want to delete user ID " + userId + "? This action cannot be undone.");
         }
     </script>
+    <style>
+        body {
+            background-color: #DAD2FF; /* Light lavender background for a calm, sophisticated look */
+            font-family: 'Arial', sans-serif;
+        }
+
+        .container {
+            background-color: #FFFFFF; /* White content area */
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); /* Deeper shadow for more emphasis */
+            padding: 40px;
+        }
+
+        h1 {
+            color: #493D9E; /* Deep purple heading */
+            font-weight: bold;
+        }
+
+        .table {
+            background-color: #FFF2AF; /* Soft yellow background for the table */
+            color: #444; /* Darker text for readability */
+        }
+
+        .table th {
+            background-color: #493D9E; /* Deep purple header */
+            color: white; /* White text for contrast */
+        }
+
+        .btn {
+            background-color: #B2A5FF; /* Soft lavender button */
+            color: white;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #493D9E; /* Darker purple on hover */
+        }
+
+        .alert {
+            background-color: #FFEB99; /* Soft yellow for alerts */
+            color: #493D9E; /* Deep purple text */
+            border-radius: 5px;
+            padding: 12px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">

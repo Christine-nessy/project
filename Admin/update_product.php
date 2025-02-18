@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 include 'admin_auth.php'; // Ensure admin is logged in
@@ -26,13 +27,13 @@ if (!isset($_GET['product_id']) && $_SERVER['REQUEST_METHOD'] !== 'POST') {
     </head>
     <body>
         <div class="container mt-5">
-            <h2 class="mb-3">Enter Product ID to Update</h2>
+            <h2 class="mb-3" style="color: #493D9E;">Enter Product ID to Update</h2>
             <form method="GET">
                 <div class="mb-3">
-                    <label class="form-label">Product ID</label>
+                    <label class="form-label" style="color: #493D9E;">Product ID</label>
                     <input type="number" class="form-control" name="product_id" required>
                 </div>
-                <button type="submit" class="btn btn-primary">Fetch Product</button>
+                <button type="submit" class="btn" style="background-color: #B2A5FF; color: white;">Fetch Product</button>
             </form>
         </div>
     </body>
@@ -98,6 +99,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
     <meta charset="UTF-8">
     <title>Update Product</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #DAD2FF; /* Light lavender background */
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            background-color: white; /* White background for the main content */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            padding: 20px;
+        }
+
+        h1 {
+            color: #493D9E; /* Dark purple for the main heading */
+        }
+
+        .form-label {
+            color: #493D9E; /* Dark purple for labels */
+        }
+
+        .btn {
+            background-color: #B2A5FF; /* Light purple for buttons */
+            color: white;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #493D9E; /* Dark purple on hover */
+            color: #FFF2AF; /* Light yellow text on hover */
+        }
+
+        .alert {
+            background-color: #FFF2AF; /* Light yellow alert */
+            color: #493D9E;
+        }
+
+        .form-control {
+            border-radius: 5px;
+        }
+
+        /* Image styling */
+        img {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
@@ -136,7 +184,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
                 <img src="data:image/png;base64,<?php echo $product['image_url']; ?>" width="100" />
             </div>
 
-            <button type="submit" class="btn btn-primary">Update Product</button>
+            <button type="submit" class="btn">Update Product</button>
             <a href="update_product.php" class="btn btn-secondary">Back to Fetch Product</a>
         </form>
     </div>
