@@ -96,6 +96,8 @@ include 'admin_auth.php'; // Ensure admin is logged in
         <div class="link-box"><a href="view_users.php">View Users</a></div>
         <div class="link-box"><a href="view_analytics.php">View Analytics</a></div>
         <div class="link-box"><a href="admin_logout.php">Logout</a></div>
+        <div class="link-box"><a href="add_stock.php">Stock</a></div>
+        
     </div>
 </body>
 </html>

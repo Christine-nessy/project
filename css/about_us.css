@@ -1,0 +1,38 @@
+body {
+    font-family: Arial, sans-serif;
+    background-image: url('images/rb_45678.png') no-repeat center center fixed;
+    background-size: cover;
+    background-position: center center;
+    /* background: linear-gradient(to bottom, #f8f9fa, #e0e7f5); */
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.about-us-section {
+    padding: 50px 20px;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    margin: 50px auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    max-width: 800px;
+    text-align: center;
+}
+.about-us-section h1 {
+    color: black;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+.about-us-section p {
+    font-size: 1.2rem;
+    line-height: 1.8;
+}
+.about-us-section img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin: 20px auto;
+    display: block;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
