@@ -118,7 +118,7 @@ $revenue = $stmt->fetch(PDO::FETCH_ASSOC)['revenue'];
         <a href="view_products.php"><i class="fas fa-box"></i> View Products</a>
         <a href="admin_orders.php"><i class="fas fa-shopping-cart"></i> View Orders</a>
         <a href="view_users.php"><i class="fas fa-users"></i> View Users</a>
-        <a href="view_analytics.php"><i class="fas fa-chart-line"></i> Analytics</a>
+        <a href="analytics.php"><i class="fas fa-chart-line"></i> Analytics</a>
         <a href="add_stock.php"><i class="fas fa-warehouse"></i> Manage Stock</a>
         <a href="admin_logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </div>
@@ -139,6 +139,8 @@ $revenue = $stmt->fetch(PDO::FETCH_ASSOC)['revenue'];
     </div>
 
     <script>
+     
+
         const ctx = document.getElementById('analyticsChart').getContext('2d');
         const analyticsChart = new Chart(ctx, {
             type: 'bar',
@@ -158,6 +160,7 @@ $revenue = $stmt->fetch(PDO::FETCH_ASSOC)['revenue'];
                 }
             }
         });
+       
     </script>
 </body>
 </html>

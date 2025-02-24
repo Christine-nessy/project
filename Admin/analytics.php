@@ -1,11 +1,9 @@
 <?php
-// Include necessary files
 session_start();
-include 'admin_auth.php'; // Ensure admin is logged in
-include '../database.php'; // Include database connection
-include 'admin_nav.php'; // Admin navigation
+include 'admin_auth.php'; 
+include '../database.php'; 
+include 'admin_nav.php'; 
 
-// Create database instance
 $db_instance = new Database('PDO', 'localhost', '3308', 'root', 'root', 'user_data');
 $db = $db_instance->getConnection();
 
@@ -20,8 +18,6 @@ $stmt = $db->prepare("
 ");
 $stmt->execute();
 $top_products = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Prepare data for Chart.js
 $product_names = json_encode(array_column($top_products, 'name'));
 $product_sales = json_encode(array_column($top_products, 'sales_count'));
 
@@ -34,7 +30,6 @@ $stmt = $db->prepare("
 ");
 $stmt->execute();
 $order_trends = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
 $order_dates = json_encode(array_column($order_trends, 'order_date'));
 $order_counts = json_encode(array_column($order_trends, 'order_count'));
 
@@ -46,7 +41,6 @@ $stmt = $db->prepare("
 ");
 $stmt->execute();
 $payments = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
 $payment_methods = json_encode(array_column($payments, 'payment_method'));
 $payment_counts = json_encode(array_column($payments, 'count'));
 
@@ -61,10 +55,8 @@ $stmt = $db->prepare("
 ");
 $stmt->execute();
 $active_users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
 $usernames = json_encode(array_column($active_users, 'username'));
 $user_orders = json_encode(array_column($active_users, 'total_orders'));
-
 ?>
 
 <!DOCTYPE html>
@@ -74,29 +66,49 @@ $user_orders = json_encode(array_column($active_users, 'total_orders'));
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Analytics</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 <body>
     <div class="container mt-5">
-        <h1 class="mb-4">Business Analytics</h1>
+        <h1 class="mb-4 text-center">Business Analytics</h1>
 
-        <!-- 🔹 Top-Selling Products -->
-        <h3>Top-Selling Products</h3>
-        <canvas id="topProductsChart"></canvas>
+        <!-- Download PDF Button -->
+        <div class="text-center mb-4">
+            <button id="downloadPDF" class="btn btn-primary">Download as PDF</button>
+        </div>
 
-        <!-- 🔹 User Activity Trends -->
-        <h3 class="mt-5">User Activity Trends</h3>
-        <canvas id="orderTrendsChart"></canvas>
+        <div id="chart-container">
+            <!-- 🔹 Top-Selling Products -->
+            <div class="card mb-4 p-3">
+                <h3>Top-Selling Products</h3>
+                <canvas id="topProductsChart"></canvas>
+            </div>
 
-        <!-- 🔹 Payment Statistics -->
-        <h3 class="mt-5">Payment Statistics</h3>
-        <canvas id="paymentChart"></canvas>
+            <!-- 🔹 User Activity Trends -->
+            <div class="card mb-4 p-3">
+                <h3>User Activity Trends</h3>
+                <canvas id="orderTrendsChart"></canvas>
+            </div>
 
-        <!-- 🔹 Most Active Users -->
-        <h3 class="mt-5">Most Active Users</h3>
-        <canvas id="activeUsersChart"></canvas>
+            <!-- 🔹 Payment Statistics -->
+            <div class="card mb-4 p-3">
+                <h3>Payment Statistics</h3>
+                <canvas id="paymentChart"></canvas>
+            </div>
+
+            <!-- 🔹 Most Active Users -->
+            <div class="card mb-4 p-3">
+                <h3>Most Active Users</h3>
+                <canvas id="activeUsersChart"></canvas>
+            </div>
+        </div>
     </div>
 
     <script>
+        const { jsPDF } = window.jspdf;
+
         // 🔹 Top-Selling Products
         new Chart(document.getElementById("topProductsChart"), {
             type: 'bar',
@@ -141,7 +153,7 @@ $user_orders = json_encode(array_column($active_users, 'total_orders'));
 
         // 🔹 Most Active Users
         new Chart(document.getElementById("activeUsersChart"), {
-            type: 'horizontalBar',
+            type: 'bar',
             data: {
                 labels: <?php echo $usernames; ?>,
                 datasets: [{
@@ -152,6 +164,20 @@ $user_orders = json_encode(array_column($active_users, 'total_orders'));
                     borderWidth: 1
                 }]
             }
+        });
+
+        // 📥 Download Graphs as PDF
+        document.getElementById("downloadPDF").addEventListener("click", function() {
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const chartContainer = document.getElementById("chart-container");
+
+            html2canvas(chartContainer, { scale: 2 }).then(canvas => {
+                const imgData = canvas.toDataURL("image/png");
+                const imgWidth = 210; // A4 width in mm
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                pdf.addImage(imgData, 'PNG', 0, 10, imgWidth, imgHeight);
+                pdf.save("business_analytics.pdf");
+            });
         });
     </script>
 </body>

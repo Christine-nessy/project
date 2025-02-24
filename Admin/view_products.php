@@ -46,6 +46,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
             color: #493D9E; /* Dark blue text for alert */
         }
     </style>
+      
 </head>
 <body>
     <div class="container mt-5">

@@ -1,0 +1,25 @@
+body {
+    background-color: #DAD2FF; /* Light background */
+    color: #493D9E; /* Dark blue text */
+}
+h1 {
+    color: #493D9E; /* Dark blue for heading */
+}
+.table {
+    border-color: #B2A5FF; /* Light purple borders */
+}
+.table-dark {
+    background-color: #B2A5FF; /* Light purple table header */
+    color: #493D9E; /* Dark blue text for header */
+}
+.table-dark th{
+    color: #FFF2AF;
+
+}
+.table-bordered th, .table-bordered td {
+    border-color: #DAD2FF; /* Light purple border for table cells */
+}
+.alert-warning {
+    background-color: #FFF2AF; /* Light yellow alert background */
+    color: #493D9E; /* Dark blue text for alert */
+}
