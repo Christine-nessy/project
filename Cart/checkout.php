@@ -13,7 +13,7 @@ if (!$user_id) {
 $db_instance = new Database('PDO', 'localhost', '3308', 'root', 'root', 'user_data');
 $db = $db_instance->getConnection();
 
-// Ensure `orders` table has required columns
+// Ensure orders table has required columns
 $product_id_column = 'product_id';  // Adjust this if your column name is different
 
 // Fetch cart items
@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $shipping_address = $_POST['address'];
         $payment_method = $_POST['payment_method'];
 
-        // Insert order into `orders` table
+        // Insert order into orders table
         $stmt = $db->prepare("
             INSERT INTO orders (user_id, name, shipping_address, payment_method, total_price, status) 
             VALUES (:user_id, :name, :shipping_address, :payment_method, :total_price, 'Pending')

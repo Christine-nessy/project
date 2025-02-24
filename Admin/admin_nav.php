@@ -46,6 +46,7 @@ include 'admin_auth.php';
 </style>
 
 <div class="nav-container">
+<a href="admin_dashboard.php" class="<?php echo (basename($_SERVER['PHP_SELF']) == 'admin_dashboard.php') ? 'active' : ''; ?>">Dashboard</a>
     <a href="add_product.php" class="<?php echo (basename($_SERVER['PHP_SELF']) == 'add_product.php') ? 'active' : ''; ?>">Insert New Product</a>
     <a href="update_product.php" class="<?php echo (basename($_SERVER['PHP_SELF']) == 'update_product.php') ? 'active' : ''; ?>">Update Product</a>
     <a href="delete_product.php" class="<?php echo (basename($_SERVER['PHP_SELF']) == 'delete_product.php') ? 'active' : ''; ?>">Delete Product</a>
@@ -53,5 +54,6 @@ include 'admin_auth.php';
     <a href="admin_orders.php" class="<?php echo (basename($_SERVER['PHP_SELF']) == 'admin_orders.php') ? 'active' : ''; ?>">View Orders</a>
     <a href="view_users.php" class="<?php echo (basename($_SERVER['PHP_SELF']) == 'view_users.php') ? 'active' : ''; ?>">View Users</a>
     <a href="analytics.php" class="<?php echo (basename($_SERVER['PHP_SELF']) == 'analytics.php') ? 'active' : ''; ?>">Analytics</a>
+    <a href="manage_stock.php" class="<?php echo (basename($_SERVER['PHP_SELF']) == 'manage_stock.php') ? 'active' : ''; ?>">Manage Stock</a>
     <a href="admin_login.php" class="<?php echo (basename($_SERVER['PHP_SELF']) == 'admin_login.php') ? 'active' : ''; ?>">Logout</a>
 </div>
