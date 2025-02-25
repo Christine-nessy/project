@@ -5,24 +5,34 @@ require_once 'PHPMailer/src/Exception.php';
 require 'C:\Apache24\htdocs\project\PHPMailer\vendor\autoload.php';
 
 require_once 'Database.php';
-require_once 'User.php';
+require_once 'user.php';
 session_start();
-
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+
+// Instantiate Database and User class
+$db = new Database('PDO', 'localhost', '3308', 'root', 'root', 'user_data');
+$user = new User($db);
+
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 // Function to send the 2FA code via email
 function send2FACode($email, $code) {
     $mail = new PHPMailer(true);
 
     try {
+        // Enable debugging (optional)
+        // $mail->SMTPDebug = 2;  
+
         // Server settings
         $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com'; // Replace with your SMTP server
+        $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = 'christinemungla16@gmail.com'; // Replace with your SMTP username
-        $mail->Password = 'bksagxgtoopsyzzl'; // Replace with your SMTP password
+        $mail->Username = 'christinemungla16@gmail.com'; // Use your Gmail
+        $mail->Password = 'bksagxgtoopsyzzl'; // Use your App Password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
         $mail->Port = 465;
 
@@ -36,14 +46,16 @@ function send2FACode($email, $code) {
         $mail->Body = "Your 2FA verification code is: <b>$code</b>";
         $mail->AltBody = "Your 2FA verification code is: $code";
 
-        $mail->send();
-        echo '2FA code has been sent to your email.';
+        if ($mail->send()) {
+            return true;
+        } else {
+            return false;
+        }
     } catch (Exception $e) {
-        echo "Error sending 2FA code: {$mail->ErrorInfo}";
+        error_log("Mailer Error: " . $mail->ErrorInfo);
+        return false;
     }
 }
-
-
 
 // Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -54,48 +66,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Basic validation
     if (empty($username) || empty($email) || empty($password)) {
         echo "All fields are required.";
-        header("Location: register.php");
         exit;
     }
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         echo "Invalid email format.";
-        header("Location: register.php");
-        exit;
-    }
-    // Check if the email is already registered
-    if ($user->emailExists($email)) {
-        echo "This email is already registered. Please use a different email.";
-        header("Location: register.php");
         exit;
     }
 
+    // Check if the email is already registered
+    if ($user->emailExists($email)) {
+        echo "This email is already registered. Please use a different email.";
+        exit;
+    }
 
     // Hash password
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-    // Instantiate Database and User class
-    $user = new User($db);
+    // Store user in database
+    if ($user->createUser($username, $email, $hashedPassword)) {
+        // Generate 2FA code and store it
+        $twoFACode = rand(100000, 999999);
+        $user->store2FACode($email, $twoFACode);
 
-   
-     // Store to database
-     if ($user->createUser($username, $email, $hashedPassword)) {
-        // Generate 2FA code and send email
-        $twoFACode = rand(100000, 999999); // Generate a 6-digit random code
-        $user->store2FACode($email, $twoFACode); // Assuming this method stores the code in the DB
-        
         // Send the code via email
-         send2FACode($email, $twoFACode);
-
-         echo "User registered successfully! A 2FA code has been sent to your email.";
-         header("Location: verify_2fa.php");
-         exit;
-     } else {
+        if (send2FACode($email, $twoFACode)) {
+            // Store email in session for verification
+            $_SESSION['verify_email'] = $email;
+            
+            // Redirect to verify_2fa.php
+            header("Location: verify_2fa.php");
+            exit;
+        } else {
+            echo "Error sending 2FA code. Please check your email settings.";
+            exit;
+        }
+    } else {
         echo "Error registering user.";
     }
- 
 }
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

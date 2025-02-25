@@ -6,32 +6,41 @@ require 'C:\Apache24\htdocs\project\PHPMailer\vendor\autoload.php';
 
 session_start(); // Start the session at the beginning of the script
 
-//$userId = $_SESSION['user_id']; // Retrieve the user_id from the session
-// Check if user_id exists in session before proceeding
-if (!isset($_SESSION['username'])) {
-    echo "You are not logged in or the session has expired. Please log in first.";
-    header("Location: login.php"); // Redirect to the login page
-    exit;
-}
+// // Check if the user is logged in
+// if (!isset($_SESSION['username']) || !isset($_SESSION['email'])) {
+//     $_SESSION['error'] = "You are not logged in or the session has expired. Please log in first.";
+//     header("Location: login_form.php");
+//     exit;
+// }
 
 
 
-// Handle form submission for 2FA verification
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $enteredCode = trim($_POST['2fa_code']); // Retrieve and sanitize the entered 2FA code
+    $email = $_SESSION['verify_email'];
+    $enteredCode = trim($_POST['2facode']); // Retrieve and sanitize the entered 2FA code
 
-    // Instantiate the Database and User classes
-   // $db = new Database('PDO', 'localhost', '3308', 'root', 'root', 'user_data');
+    $db = new Database('PDO', 'localhost', '3308', 'root', 'root', 'user_data');
     $user = new User($db);
 
-    // Verify the 2FA code
-    if ($user->verify2FACode($userId, $enteredCode)) {
-        echo "2FA verified successfully. You are logged in!";
-        // Redirect the user to their dashboard or a secure page
-        header("Location: dashboard.php");
-        exit;
-    } else {
-        echo "Invalid or expired 2FA code. Please try again.";
+    // if ($user->verify2FACode($email, $enteredCode)) {
+    //     $_SESSION['success'] = "2FA verified successfully. You are logged in!";
+    //     header("Location: dashboard.php");
+    //     exit;
+    // } else {
+    //     $_SESSION['error'] = "Invalid or expired 2FA code. Please try again.";
+    //     header("Location: verify_2fa.php");
+    //     exit;
+    // }
+    $tab=$user->verify2FACode($email, $enteredCode);
+    if($tab===true){
+        $_SESSION['success'] = "2FA verified successfully. You are logged in!";
+             header("Location: dashboard.php");
+           exit; 
+    }
+    else{
+        $_SESSION['error'] = "Invalid or expired 2FA code. Please try again.";
+         header("Location: verify_2fa.php");
+         exit;
     }
 }
 ?>
@@ -117,8 +126,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         <form action="verify_2fa.php" method="POST">
             <div class="mb-3">
-                <label for="2fa_code" class="form-label">Enter 2FA Code</label>
-                <input type="text" class="form-control" id="2fa_code" name="2fa_code" placeholder="Enter your 6-digit code" required>
+                <label  class="form-label">Enter 2FA Code</label>
+                <input type="text" class="form-control" id="2fa_code" name="2facode" placeholder="Enter your 6-digit code" required>
             </div>
             <button type="submit" class="btn btn-primary">Verify</button>
         </form>
