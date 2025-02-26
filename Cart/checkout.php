@@ -10,134 +10,87 @@ if (!$user_id) {
 }
 
 // Database connection
-class DatabaseConnection {
-    private $db;
-
-    public function __construct() {
-        $db_instance = new Database('PDO', 'localhost', '3308', 'root', 'root', 'user_data');
-        $this->db = $db_instance->getConnection();
-    }
-
-    public function getConnection() {
-        return $this->db;
-    }
-}
-
-// Shopping Cart Class
-class ShoppingCart {
-    private $db;
-    private $user_id;
-
-    public function __construct($db, $user_id) {
-        $this->db = $db;
-        $this->user_id = $user_id;
-    }
-
-    public function getCartItems() {
-        $stmt = $this->db->prepare("
-            SELECT sc.product_id, sc.quantity, p.name, p.price, p.image_url 
-            FROM shopping_cart sc
-            JOIN products p ON sc.product_id = p.product_id
-            WHERE sc.user_id = :user_id
-        ");
-        $stmt->bindParam(':user_id', $this->user_id, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    public function clearCart() {
-        $stmt = $this->db->prepare("DELETE FROM shopping_cart WHERE user_id = :user_id");
-        $stmt->bindParam(':user_id', $this->user_id, PDO::PARAM_INT);
-        $stmt->execute();
-    }
-}
-
-// Order Processing Class
-class OrderProcessor {
-    private $db;
-    private $user_id;
-
-    public function __construct($db, $user_id) {
-        $this->db = $db;
-        $this->user_id = $user_id;
-    }
-
-    public function placeOrder($name, $shipping_address, $payment_method, $cart_items) {
-        try {
-            $this->db->beginTransaction();
-
-            $total_price = array_reduce($cart_items, function ($sum, $item) {
-                return $sum + ($item['price'] * $item['quantity']);
-            }, 0);
-
-            // Insert order
-            $stmt = $this->db->prepare("
-                INSERT INTO orders (user_id, name, shipping_address, payment_method, total_price, status) 
-                VALUES (:user_id, :name, :shipping_address, :payment_method, :total_price, 'Pending')
-            ");
-            $stmt->bindParam(':user_id', $this->user_id, PDO::PARAM_INT);
-            $stmt->bindParam(':name', $name, PDO::PARAM_STR);
-            $stmt->bindParam(':shipping_address', $shipping_address, PDO::PARAM_STR);
-            $stmt->bindParam(':payment_method', $payment_method, PDO::PARAM_STR);
-            $stmt->bindParam(':total_price', $total_price, PDO::PARAM_STR);
-            $stmt->execute();
-            $order_id = $this->db->lastInsertId();
-
-            // Insert order items
-            foreach ($cart_items as $item) {
-                $stmt = $this->db->prepare("
-                    INSERT INTO order_items (order_id, product_id, quantity, price) 
-                    VALUES (:order_id, :product_id, :quantity, :price)
-                ");
-                $stmt->bindParam(':order_id', $order_id, PDO::PARAM_INT);
-                $stmt->bindParam(':product_id', $item['product_id'], PDO::PARAM_INT);
-                $stmt->bindParam(':quantity', $item['quantity'], PDO::PARAM_INT);
-                $stmt->bindParam(':price', $item['price'], PDO::PARAM_STR);
-                $stmt->execute();
-            }
-
-            // Commit transaction
-            $this->db->commit();
-
-            return $order_id;
-        } catch (Exception $e) {
-            $this->db->rollBack();
-            throw new Exception("Error processing order: " . $e->getMessage());
-        }
-    }
-}
-
-// Initialize database connection
-$db_instance = new DatabaseConnection();
+$db_instance = new Database('PDO', 'localhost', '3308', 'root', 'root', 'user_data');
 $db = $db_instance->getConnection();
 
-// Handle cart operations
-$cart = new ShoppingCart($db, $user_id);
-$cart_items = $cart->getCartItems();
+// Ensure orders table has required columns
+$product_id_column = 'product_id';  // Adjust this if your column name is different
+
+// Fetch cart items
+$stmt = $db->prepare("
+    SELECT sc.product_id, sc.quantity, p.name, p.price, p.image_url 
+    FROM shopping_cart sc
+    JOIN products p ON sc.product_id = p.$product_id_column
+    WHERE sc.user_id = :user_id
+");
+$stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+$stmt->execute();
+$cart_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 if (empty($cart_items)) {
     echo "<p>Your cart is empty. <a href='../products.php'>Shop now</a></p>";
     exit;
 }
 
-// Handle order processing
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $name = $_POST['name'];
-    $shipping_address = $_POST['address'];
-    $payment_method = $_POST['payment_method'];
+// Calculate total price
+$total_price = 0;
+foreach ($cart_items as $item) {
+    $total_price += $item['price'] * $item['quantity'];
+}
 
-    $orderProcessor = new OrderProcessor($db, $user_id);
+// Process checkout if form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
-        $order_id = $orderProcessor->placeOrder($name, $shipping_address, $payment_method, $cart_items);
-        $cart->clearCart();
+        $db->beginTransaction();
+
+        // Get form data
+        $name = $_POST['name'];
+        $shipping_address = $_POST['address'];
+        $payment_method = $_POST['payment_method'];
+
+        // Insert order into orders table
+        $stmt = $db->prepare("
+            INSERT INTO orders (user_id, name, shipping_address, payment_method, total_price, status) 
+            VALUES (:user_id, :name, :shipping_address, :payment_method, :total_price, 'Pending')
+        ");
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+        $stmt->bindParam(':shipping_address', $shipping_address, PDO::PARAM_STR);
+        $stmt->bindParam(':payment_method', $payment_method, PDO::PARAM_STR);
+        $stmt->bindParam(':total_price', $total_price, PDO::PARAM_STR);
+        $stmt->execute();
+        $order_id = $db->lastInsertId();
+
+        // Insert order items
+        foreach ($cart_items as $item) {
+            $stmt = $db->prepare("
+                INSERT INTO order_items (order_id, product_id, quantity, price) 
+                VALUES (:order_id, :product_id, :quantity, :price)
+            ");
+            $stmt->bindParam(':order_id', $order_id, PDO::PARAM_INT);
+            $stmt->bindParam(':product_id', $item['product_id'], PDO::PARAM_INT);
+            $stmt->bindParam(':quantity', $item['quantity'], PDO::PARAM_INT);
+            $stmt->bindParam(':price', $item['price'], PDO::PARAM_STR);
+            $stmt->execute();
+        }
+
+        // Clear shopping cart after successful checkout
+        $stmt = $db->prepare("DELETE FROM shopping_cart WHERE user_id = :user_id");
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        // Commit transaction
+        $db->commit();
+
+        // Redirect to order confirmation page
         header("Location: confirmation.php?order_id=" . $order_id);
         exit;
     } catch (Exception $e) {
-        die($e->getMessage());
+        $db->rollBack();
+        die("Error processing order: " . $e->getMessage());
     }
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
